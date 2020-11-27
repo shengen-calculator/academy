@@ -13,7 +13,7 @@ const styles = (theme) => ({
         color: 'rgba(255, 255, 255, 0.7)',
         '&:hover,&:focus': {
             backgroundColor: 'rgba(255, 255, 255, 0.08)',
-        },
+        }
     },
     itemCategory: {
         backgroundColor: '#232f3e',

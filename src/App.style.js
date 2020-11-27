@@ -112,7 +112,7 @@ theme = {
 
 export const drawerWidth = 256;
 
-export const styles = {
+const styles = {
     root: {
         display: 'flex',
         minHeight: '100vh',
@@ -138,3 +138,5 @@ export const styles = {
         background: '#eaeff1',
     },
 };
+
+export default styles;
