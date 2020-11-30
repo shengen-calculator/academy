@@ -5,8 +5,8 @@ import 'firebase/functions';
 
 const config = {
     apiKey: "XXXXXXX",
-    authDomain: "app.firebaseapp.com",
-    databaseURL: "https://app.firebaseio.com/",
+    authDomain: "apple-c8f4f.firebaseapp.com",
+    databaseURL: "https://apple-c8f4f.firebaseio.com/",
     projectId: "apple-c8f4f"
 };
 
