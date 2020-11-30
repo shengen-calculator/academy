@@ -25,7 +25,7 @@ function ReservationPage(props) {
             </AppBar>
             <div className={classes.contentWrapper}>
                 <Typography color="textSecondary" align="center">
-                    No users for this project yet
+                    Reservation page
                 </Typography>
             </div>
         </Paper>

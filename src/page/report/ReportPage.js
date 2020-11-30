@@ -25,7 +25,7 @@ function ReportPage(props) {
             </AppBar>
             <div className={classes.contentWrapper}>
                 <Typography color="textSecondary" align="center">
-                    No users for this project yet
+                    Report page
                 </Typography>
             </div>
         </Paper>
