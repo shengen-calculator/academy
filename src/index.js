@@ -5,12 +5,14 @@ import reportWebVitals from './reportWebVitals';
 import configureStore from "./redux/configureStore";
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react'
+import ToastrMessage from "./component/ToastrMessage";
 
 const {store, persistent} = configureStore();
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistent}>
             <React.StrictMode>
+                <ToastrMessage/>
                 <App/>
             </React.StrictMode>
         </PersistGate>

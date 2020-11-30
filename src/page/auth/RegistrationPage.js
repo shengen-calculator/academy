@@ -5,12 +5,14 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
+import {connect} from "react-redux";
 import styles from "./RegistrationPage.style";
 import Button from "@material-ui/core/Button";
 import {regEmail, regPassword} from "../../util/Regs";
 import TextInput from "../../component/TextInput";
+import {registrationRequest} from "../../redux/actions/authenticationActions";
 
-function RegistrationPage(props) {
+function RegistrationPage({auth, registrationRequest, ...props}) {
     const {classes} = props;
     const [authentication, setAuthentication] = useState({
         name: '',
@@ -25,7 +27,7 @@ function RegistrationPage(props) {
         event.preventDefault();
         if (!isFormValid()) return;
         const { email, password, name } = authentication;
-
+        registrationRequest({email: email, password: password, name: name});
     };
 
 
@@ -129,6 +131,7 @@ function RegistrationPage(props) {
                             <Button
                                 className={classes.formItem}
                                 type="submit"
+                                disabled={auth.registering}
                                 variant="contained"
                                 onChange={handleChange}>
                                 Registration
@@ -141,4 +144,16 @@ function RegistrationPage(props) {
     );
 }
 
-export default withStyles(styles)(RegistrationPage);
+
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication
+    }
+}
+
+// noinspection JSUnusedGlobalSymbols
+const mapDispatchToProps = {
+    registrationRequest
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (withStyles(styles)(RegistrationPage));
