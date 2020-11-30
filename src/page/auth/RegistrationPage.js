@@ -6,9 +6,9 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
 import styles from "./RegistrationPage.style";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-
+import {regEmail, regPassword} from "../../util/Regs";
+import TextInput from "../../component/TextInput";
 
 function RegistrationPage(props) {
     const {classes} = props;
@@ -21,8 +21,44 @@ function RegistrationPage(props) {
     });
     const [errors, setErrors] = useState({});
 
-    const handleRegistration = () => {
-        debugger;
+    const handleRegistration = (event) => {
+        event.preventDefault();
+        if (!isFormValid()) return;
+        const { email, password, name } = authentication;
+
+    };
+
+
+    const isFormValid = () => {
+        const { email, password, name, repeat } = authentication;
+
+        const errors = {};
+
+        if (!name) {
+            errors.name = "The field is obligatory";
+        }
+
+        if (!email) {
+            errors.email = "The field is obligatory";
+        } else if (!regEmail.test(String(email).toLowerCase())) {
+            errors.email = "Email format is not correct";
+        }
+
+        if (!password) {
+            errors.password = "The field is obligatory";
+        } else if (!regPassword.test(String(password).toLowerCase())) {
+            errors.password = "Password must contain at least 8 characters";
+        }
+
+        if (!repeat) {
+            errors.repeat = "The field is obligatory";
+        } else if (password !== repeat) {
+            errors.repeat = "Password and confirm password not matched"
+        }
+
+        setErrors(errors);
+        // Form is valid if the errors object still has no properties
+        return Object.keys(errors).length === 0;
     };
 
     const handleChange = (event) => {
@@ -56,7 +92,7 @@ function RegistrationPage(props) {
                 >
                     <Grid item xs={3}>
                         <form className={classes.form} onSubmit={handleRegistration}>
-                            <TextField
+                            <TextInput
                                 className={classes.formItem}
                                 name="name"
                                 label="Name"
@@ -64,7 +100,7 @@ function RegistrationPage(props) {
                                 value={authentication.name}
                                 error={errors.name}
                             />
-                            <TextField
+                            <TextInput
                                 className={classes.formItem}
                                 name="email"
                                 label="Email"
@@ -72,7 +108,7 @@ function RegistrationPage(props) {
                                 value={authentication.email}
                                 error={errors.email}
                             />
-                            <TextField
+                            <TextInput
                                 className={classes.formItem}
                                 name="password"
                                 label="Password"
@@ -81,7 +117,7 @@ function RegistrationPage(props) {
                                 value={authentication.password}
                                 error={errors.password}
                             />
-                            <TextField
+                            <TextInput
                                 className={classes.formItem}
                                 name="repeat"
                                 label="Repeat Password"
