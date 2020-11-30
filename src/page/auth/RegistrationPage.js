@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,8 +11,27 @@ import Button from "@material-ui/core/Button";
 
 
 function RegistrationPage(props) {
-    const { classes } = props;
-    const handleRegistration = () => {};
+    const {classes} = props;
+    const [authentication, setAuthentication] = useState({
+        name: '',
+        email: '',
+        password: '',
+        repeat: '',
+        requestInProcess: false
+    });
+    const [errors, setErrors] = useState({});
+
+    const handleRegistration = () => {
+        debugger;
+    };
+
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setAuthentication(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     return (
         <Paper className={classes.paper}>
@@ -27,7 +46,7 @@ function RegistrationPage(props) {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <div className={classes.contentWrapper} >
+            <div className={classes.contentWrapper}>
                 <Grid
                     container
                     spacing={0}
@@ -36,12 +55,48 @@ function RegistrationPage(props) {
                     justify="center"
                 >
                     <Grid item xs={3}>
-                        <form className={classes.form} onSubmit={handleRegistration} >
-                            <TextField className={classes.formItem} id="name" label="Name" />
-                            <TextField className={classes.formItem} id="email" label="Email" />
-                            <TextField className={classes.formItem} id="password" label="Password" type="password" />
-                            <TextField className={classes.formItem} id="repeat" label="Repeat Password" type="password" />
-                            <Button className={classes.formItem} type="submit" variant="contained">Registration</Button>
+                        <form className={classes.form} onSubmit={handleRegistration}>
+                            <TextField
+                                className={classes.formItem}
+                                name="name"
+                                label="Name"
+                                onChange={handleChange}
+                                value={authentication.name}
+                                error={errors.name}
+                            />
+                            <TextField
+                                className={classes.formItem}
+                                name="email"
+                                label="Email"
+                                onChange={handleChange}
+                                value={authentication.email}
+                                error={errors.email}
+                            />
+                            <TextField
+                                className={classes.formItem}
+                                name="password"
+                                label="Password"
+                                type="password"
+                                onChange={handleChange}
+                                value={authentication.password}
+                                error={errors.password}
+                            />
+                            <TextField
+                                className={classes.formItem}
+                                name="repeat"
+                                label="Repeat Password"
+                                type="password"
+                                onChange={handleChange}
+                                value={authentication.repeat}
+                                error={errors.repeat}
+                            />
+                            <Button
+                                className={classes.formItem}
+                                type="submit"
+                                variant="contained"
+                                onChange={handleChange}>
+                                Registration
+                            </Button>
                         </form>
                     </Grid>
                 </Grid>
