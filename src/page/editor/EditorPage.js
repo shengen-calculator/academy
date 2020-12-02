@@ -7,14 +7,26 @@ import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
 import styles from "./EditorPage.style";
 import RowOfTables from "../../component/RowOfTables";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
 
 function EditorPage(props) {
     const { classes } = props;
+    const [open, setOpen] = React.useState(false);
     const vertical = [0,1,2,3,4,5,6,7,8,9];
 
     const tableClickHandler = (x, y) => {
-        alert(`x : ${x} - y : ${y}`);
+        setOpen(true);
+        //alert(`x : ${x} - y : ${y}`);
+    };
+    const handleClose = () => {
+        setOpen(false);
     };
 
     return (
@@ -37,6 +49,32 @@ function EditorPage(props) {
                         )
                 }
             </div>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                <DialogContent>
+                    {/* eslint-disable-next-line react/jsx-no-undef */}
+                    <DialogContentText>
+                        To subscribe to this website, please enter your email address here. We will send updates
+                        occasionally.
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleClose} color="primary">
+                        Subscribe
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
     );
 }

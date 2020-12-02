@@ -8,7 +8,7 @@ function RowOfTables({onTableClick}) {
         <div className="row-tables">
             {
                 height.map(x => {
-                    return <div key={x} onClick={() => onTableClick(x)} className="table"/>
+                    return <div key={x} onClick={() => onTableClick(x)} className="table">3</div>
                 })
             }
         </div>
