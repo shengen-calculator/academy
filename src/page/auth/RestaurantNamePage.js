@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,13 +10,24 @@ import Button from "@material-ui/core/Button";
 import TextInput from "../../component/TextInput";
 import {updateDetailsRequest} from "../../redux/actions/userActions";
 import {connect} from "react-redux";
+import {useHistory} from "react-router-dom";
 
 
 function RestaurantNamePage(props) {
     const {classes, inProgress, updateDetailsRequest, auth} = props;
     const [errors, setErrors] = useState({});
     const [restaurant, setRestaurant] = useState({name: ''});
+    const history = useHistory();
 
+    useEffect(() => {
+        if (auth.restaurant) {
+            if(history.location.state) {
+                history.push(history.location.state.from.pathname);
+            } else {
+                history.push('/reservation');
+            }
+        }
+    }, [auth.restaurant, history]);
 
     const handleSetRestaurantName = (event) => {
         event.preventDefault();

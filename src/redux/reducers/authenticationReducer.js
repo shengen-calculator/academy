@@ -18,6 +18,12 @@ export default function authenticationReducer(state = initialState.authenticatio
                 restaurant: action.params.restaurant
             };
 
+        case types.USER_UPDATE_SUCCESS:
+            return {
+                ...state,
+                restaurant: action.params.restaurant
+            };
+
         case types.LOG_OUT_SUCCESS:
             return {
                 ...state,
