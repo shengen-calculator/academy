@@ -34,7 +34,7 @@ function RegistrationPage({auth, registrationRequest, inProgress, ...props}) {
         event.preventDefault();
         if (!isFormValid()) return;
         const { email, password, name } = authentication;
-        registrationRequest({email: email, password: password, name: name});
+        registrationRequest({email: email, password: password}, {name: name});
     };
 
 

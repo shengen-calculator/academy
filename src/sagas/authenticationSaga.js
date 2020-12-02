@@ -36,8 +36,8 @@ export function* register(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
         const { user } = yield call(AuthenticationApi.register, action.params);
-        yield call(UserApi.saveUserDetails, user.uid, action.params.name);
-        yield put({type: types.REGISTRATION_SUCCESS, params: {...action.params, uid: user.uid}});
+        yield call(UserApi.saveUserDetails, user.uid, action.details);
+        yield put({type: types.REGISTRATION_SUCCESS, params: {...action.details, uid: user.uid}});
     } catch (e) {
         yield put({type: types.API_CALL_ERROR});
         yield put({type: types.REGISTRATION_FAILURE, text: e.message});

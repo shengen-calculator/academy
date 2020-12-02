@@ -41,9 +41,9 @@ function Navigator(props) {
     return (
         <Drawer variant="permanent" {...other}>
             <List disablePadding>
-                <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
-                    Shtefanyo V&V
-                </ListItem>
+                {auth.restaurant && <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
+                    {auth.restaurant}
+                </ListItem>}
                 {categories.map(({ id, children }) => (
                     <React.Fragment key={id}>
                         <ListItem className={classes.categoryHeader}>

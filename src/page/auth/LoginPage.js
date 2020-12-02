@@ -23,7 +23,11 @@ function LoginPage({authenticationRequest, inProgress, auth, ...props}) {
 
     useEffect(() => {
         if (auth.name) {
-            history.push(history.location.state.from.pathname);
+            if(history.location.state) {
+                history.push(history.location.state.from.pathname);
+            } else {
+                history.push('/reservation');
+            }
         }
     }, [auth.name, history]);
 

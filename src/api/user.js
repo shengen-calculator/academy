@@ -6,9 +6,9 @@ class UserApi {
         return userRef.add(details);
     }
 
-    static saveUserDetails(uid, name){
+    static saveUserDetails(uid, data){
         const userRef = firestore.doc(`users/${uid}`);
-        return userRef.set({name: name}, { merge: true });
+        return userRef.set(data, { merge: true });
     }
 
     static getUserDetails(uid){

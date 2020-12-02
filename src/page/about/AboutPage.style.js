@@ -4,6 +4,7 @@ const styles = (theme) => ({
         maxWidth: 936,
         margin: 'auto',
         overflow: 'hidden',
+        fontSize: 16,
     },
     searchBar: {
         borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
