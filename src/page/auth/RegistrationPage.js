@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
 import {connect} from "react-redux";
+import {useHistory} from 'react-router-dom';
 import styles from "./RegistrationPage.style";
 import Button from "@material-ui/core/Button";
 import {regEmail, regPassword} from "../../util/Regs";
@@ -21,6 +22,13 @@ function RegistrationPage({auth, registrationRequest, inProgress, ...props}) {
         repeat: ''
     });
     const [errors, setErrors] = useState({});
+    const history = useHistory();
+
+    useEffect(() => {
+        if(auth.name) {
+            history.push('/name');
+        }
+    }, [auth.name, history]);
 
     const handleRegistration = (event) => {
         event.preventDefault();
@@ -142,7 +150,6 @@ function RegistrationPage({auth, registrationRequest, inProgress, ...props}) {
         </Paper>
     );
 }
-
 
 function mapStateToProps(state) {
     return {

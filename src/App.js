@@ -12,7 +12,6 @@ import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from '../src/component/Navigator';
-import Content from '../src/component/Content';
 import AboutPage from "./page/about/AboutPage";
 import Header from '../src/component/Header';
 import ReservationPage from "./page/reservation/ReservationPage";
@@ -22,6 +21,8 @@ import EditorPage from "./page/editor/EditorPage";
 import RegistrationPage from "./page/auth/RegistrationPage";
 import LoginPage from "./page/auth/LoginPage";
 import RestaurantNamePage from "./page/auth/RestaurantNamePage";
+import PrivateRoute from "./component/PrivateRoute";
+import {connect} from "react-redux";
 
 function Copyright() {
     return (
@@ -38,7 +39,7 @@ function Copyright() {
 
 
 function Paperbase(props) {
-    const {classes} = props;
+    const {classes, auth} = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -56,11 +57,12 @@ function Paperbase(props) {
                                 PaperProps={{style: {width: drawerWidth}}}
                                 variant="temporary"
                                 open={mobileOpen}
+                                auth={auth}
                                 onClose={handleDrawerToggle}
                             />
                         </Hidden>
                         <Hidden xsDown implementation="css">
-                            <Navigator PaperProps={{style: {width: drawerWidth}}}/>
+                            <Navigator auth={auth} PaperProps={{style: {width: drawerWidth}}}/>
                         </Hidden>
                     </nav>
                     <div className={classes.app}>
@@ -68,7 +70,7 @@ function Paperbase(props) {
                                 <Route exact path="/">
                                     <Header text="About Page" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
-                                        <Content/>
+                                        <AboutPage/>
                                     </main>
                                 </Route>
                                 <Route exact path="/about">
@@ -77,30 +79,30 @@ function Paperbase(props) {
                                         <AboutPage/>
                                     </main>
                                 </Route>
-                                <Route exact path="/editor">
+                                <PrivateRoute exact path="/editor" auth={auth}>
                                     <Header text="Editor Page" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
                                         <EditorPage/>
                                     </main>
-                                </Route>
-                                <Route exact path="/reservation">
+                                </PrivateRoute>
+                                <PrivateRoute exact path="/reservation" auth={auth}>
                                     <Header text="Reservation Page" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
                                         <ReservationPage/>
                                     </main>
-                                </Route>
-                                <Route exact path="/report">
+                                </PrivateRoute>
+                                <PrivateRoute exact path="/report" auth={auth}>
                                     <Header text="Report Page" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
                                         <ReportPage/>
                                     </main>
-                                </Route>
-                                <Route exact path="/reservation/table/:number">
+                                </PrivateRoute>
+                                <PrivateRoute exact path="/reservation/table/:number" auth={auth}>
                                     <Header text="Table Reservations" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
                                         <TablePage/>
                                     </main>
-                                </Route>
+                                </PrivateRoute>
                                 <Route exact path="/login">
                                     <Header text="Login Page" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
@@ -113,7 +115,7 @@ function Paperbase(props) {
                                         <RegistrationPage/>
                                     </main>
                                 </Route>
-                                <Route exact path="/name">
+                                <Route exact path="/name" auth={auth}>
                                     <Header text="Restaurant name" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
                                         <RestaurantNamePage/>
@@ -131,4 +133,10 @@ function Paperbase(props) {
     );
 }
 
-export default withStyles(styles)(Paperbase);
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication
+    }
+}
+
+export default connect(mapStateToProps) (withStyles(styles)(Paperbase));

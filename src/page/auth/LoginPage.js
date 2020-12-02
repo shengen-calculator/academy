@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -10,14 +10,22 @@ import Button from "@material-ui/core/Button";
 import {connect} from "react-redux";
 import TextInput from "../../component/TextInput";
 import {authenticationRequest} from "../../redux/actions/authenticationActions";
+import {useHistory} from "react-router-dom";
 
-function LoginPage({authenticationRequest, inProgress, ...props}) {
+function LoginPage({authenticationRequest, inProgress, auth, ...props}) {
     const { classes } = props;
     const [authentication, setAuthentication] = useState({
         email: '',
         password: '',
     });
     const [errors, setErrors] = useState({});
+    const history = useHistory();
+
+    useEffect(() => {
+        if (auth.name) {
+            history.push(history.location.state.from.pathname);
+        }
+    }, [auth.name, history]);
 
     const handleLogin = (event) => {
         event.preventDefault();

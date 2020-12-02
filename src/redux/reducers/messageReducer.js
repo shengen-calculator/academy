@@ -11,6 +11,20 @@ export default function messageReducer(state = initialState.message, action) {
                 text: 'Congratulation. Your account successfully created.'
             };
 
+        case types.AUTHENTICATION_SUCCESS:
+            return {
+                ...state,
+                text: ` Welcome ${action.params.name}`,
+                type: 'success',
+            };
+
+        case types.LOG_OUT_SUCCESS:
+            return {
+                ...state,
+                type: 'success',
+                text: 'Good byes.'
+            };
+
         case types.REGISTRATION_FAILURE:
             return {
                 ...state,
@@ -24,8 +38,6 @@ export default function messageReducer(state = initialState.message, action) {
                 type: 'error',
                 text: action.text
             };
-
-
 
         default:
             return state;

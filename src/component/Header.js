@@ -41,10 +41,10 @@ function Header(props) {
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
-                                onClick={onDrawerToggle}
+                                onClick={logoutRequest}
                                 className={classes.menuButton}
                             >
-                                {auth.name && <ExitToAppIcon onClick={logoutRequest}/>}
+                                {auth.name && <ExitToAppIcon/>}
                             </IconButton>
                         </Grid>
                     </Grid>

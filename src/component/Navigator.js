@@ -15,7 +15,6 @@ import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import {NavLink} from 'react-router-dom';
 import styles from './Navigator.style';
-import {connect} from "react-redux";
 
 const categories = [
     {
@@ -57,9 +56,8 @@ function Navigator(props) {
                             </ListItemText>
                         </ListItem>
                         {children.map(({ id: childId, icon, path, isAuth}) => (
-                            <div>
+                            <React.Fragment key={childId}>
                                 {((auth.name && !isAuth)||(!auth.name))&& <ListItem
-                                    key={childId}
                                     component={NavLink} to={path}
                                     className={clsx(classes.item)}
                                     activeClassName={classes.itemActiveItem}
@@ -80,7 +78,7 @@ function Navigator(props) {
                                         {childId}
                                     </ListItemText>
                                 </ListItem>}
-                            </div>
+                            </React.Fragment>
                         ))}
 
                         <Divider className={classes.divider} />
@@ -91,10 +89,4 @@ function Navigator(props) {
     );
 }
 
-
-function mapStateToProps(state) {
-    return {
-        auth: state.authentication
-    }
-}
-export default connect(mapStateToProps) (withStyles(styles)(Navigator));
+export default withStyles(styles)(Navigator);

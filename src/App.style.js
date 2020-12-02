@@ -116,6 +116,7 @@ const styles = {
     root: {
         display: 'flex',
         minHeight: '100vh',
+        fontSize: 16,
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
