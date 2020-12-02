@@ -9,9 +9,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import styles from "./Header.style";
+import {connect} from "react-redux";
+import {logoutRequest} from "../redux/actions/authenticationActions";
 
 function Header(props) {
-    const { classes, onDrawerToggle, text } = props;
+    const { classes, onDrawerToggle, text, auth, logoutRequest } = props;
     return (
         <React.Fragment>
             <AppBar color="primary" position="sticky" elevation={0}>
@@ -31,7 +33,7 @@ function Header(props) {
                         </Hidden>
                         <Grid item xs />
                         <Grid item>
-                            <Typography>Geyza Imre</Typography>
+                            <Typography>{auth.name}</Typography>
                         </Grid>
                         <Grid item>
                         </Grid>
@@ -42,7 +44,7 @@ function Header(props) {
                                 onClick={onDrawerToggle}
                                 className={classes.menuButton}
                             >
-                                <ExitToAppIcon />
+                                {auth.name && <ExitToAppIcon onClick={logoutRequest}/>}
                             </IconButton>
                         </Grid>
                     </Grid>
@@ -69,4 +71,16 @@ function Header(props) {
     );
 }
 
-export default withStyles(styles)(Header);
+
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication
+    }
+}
+
+// noinspection JSUnusedGlobalSymbols
+const mapDispatchToProps = {
+    logoutRequest
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (withStyles(styles)(Header));

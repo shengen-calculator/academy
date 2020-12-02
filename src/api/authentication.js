@@ -1,11 +1,11 @@
 import {auth} from './database';
 
 class AuthenticationApi {
-    static logIn(credentials){
-        return auth.signInWithEmailAndPassword(credentials.email, credentials.password);
+    static logIn({email, password}){
+        return auth.signInWithEmailAndPassword(email, password);
     }
-    static register(credentials){
-        return auth.createUserWithEmailAndPassword(credentials.email, credentials.password);
+    static register({email, password}){
+        return auth.createUserWithEmailAndPassword(email, password);
     }
     static logOut() {
         return auth.signOut();

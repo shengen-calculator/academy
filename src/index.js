@@ -6,15 +6,18 @@ import configureStore from "./redux/configureStore";
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react'
 import ToastrMessage from "./component/ToastrMessage";
+import {SnackbarProvider} from 'notistack';
 
 const {store, persistent} = configureStore();
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistent}>
-            <React.StrictMode>
-                <ToastrMessage/>
-                <App/>
-            </React.StrictMode>
+            <SnackbarProvider maxSnack={3}>
+                <React.StrictMode>
+                    <ToastrMessage/>
+                    <App/>
+                </React.StrictMode>
+            </SnackbarProvider>
         </PersistGate>
     </Provider>,
     document.getElementById('root')

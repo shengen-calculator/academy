@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -6,13 +6,51 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
 import styles from "./LoginPage.style";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import {connect} from "react-redux";
+import TextInput from "../../component/TextInput";
+import {authenticationRequest} from "../../redux/actions/authenticationActions";
 
-
-function LoginPage(props) {
+function LoginPage({authenticationRequest, inProgress, ...props}) {
     const { classes } = props;
-    const handleLogin = () => {};
+    const [authentication, setAuthentication] = useState({
+        email: '',
+        password: '',
+    });
+    const [errors, setErrors] = useState({});
+
+    const handleLogin = (event) => {
+        event.preventDefault();
+        if (!isFormValid()) return;
+        const { email, password } = authentication;
+        authenticationRequest({email: email, password: password});
+    };
+
+    const isFormValid = () => {
+        const { email, password } = authentication;
+        const errors = {};
+
+        if (!email) {
+            errors.email = "The field is obligatory";
+        }
+
+        if (!password) {
+            errors.password = "The field is obligatory";
+        }
+
+        setErrors(errors);
+        // Form is valid if the errors object still has no properties
+        return Object.keys(errors).length === 0;
+
+    };
+
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setAuthentication(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     return (
         <Paper className={classes.paper}>
@@ -37,9 +75,31 @@ function LoginPage(props) {
                 >
                     <Grid item xs={3}>
                         <form className={classes.form} onSubmit={handleLogin} >
-                            <TextField className={classes.formItem} id="login" label="Login" />
-                            <TextField className={classes.formItem} id="password" label="Password" type="password" />
-                            <Button className={classes.formItem} type="submit" variant="contained">LogIn</Button>
+                            <TextInput
+                                className={classes.formItem}
+                                name="email"
+                                label="Email"
+                                onChange={handleChange}
+                                value={authentication.email}
+                                error={errors.email}
+                            />
+                            <TextInput
+                                className={classes.formItem}
+                                name="password"
+                                label="Password"
+                                type="password"
+                                onChange={handleChange}
+                                value={authentication.password}
+                                error={errors.password}
+                            />
+                            <Button
+                                className={classes.formItem}
+                                type="submit"
+                                disabled={inProgress > 0}
+                                variant="contained"
+                                onChange={handleChange}>
+                                {inProgress > 0 ? 'Logging...' : 'LogIn'}
+                            </Button>
                         </form>
                     </Grid>
                 </Grid>
@@ -48,4 +108,17 @@ function LoginPage(props) {
     );
 }
 
-export default withStyles(styles)(LoginPage);
+
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication,
+        inProgress: state.apiCallsInProgress
+    }
+}
+
+// noinspection JSUnusedGlobalSymbols
+const mapDispatchToProps = {
+    authenticationRequest
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (withStyles(styles)(LoginPage));

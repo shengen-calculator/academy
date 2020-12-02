@@ -15,13 +15,14 @@ import TimerIcon from '@material-ui/icons/Timer';
 import SettingsIcon from '@material-ui/icons/Settings';
 import {NavLink} from 'react-router-dom';
 import styles from './Navigator.style';
+import {connect} from "react-redux";
 
 const categories = [
     {
         id: 'All Users',
         children: [
-            { id: 'Registration', icon: <PeopleIcon />, path: '/registration', active: true },
-            { id: 'Login', icon: <AccountBoxIcon />, path: '/login' },
+            { id: 'Registration', icon: <PeopleIcon />, path: '/registration', isAuth: true, active: true },
+            { id: 'Login', icon: <AccountBoxIcon />, path: '/login', isAuth: true},
             { id: 'About', icon: <PublicIcon />, path: '/about' }
         ],
     },
@@ -30,13 +31,13 @@ const categories = [
         children: [
             { id: 'Editor', icon: <SettingsIcon />, path: '/editor' },
             { id: 'Reservation', icon: <TimerIcon />, path: '/reservation' },
-            { id: 'Report', icon: <BookIcon /> , path: '/report'},
+            { id: 'Report', icon: <BookIcon /> , path: '/report' },
         ],
     },
 ];
 
 function Navigator(props) {
-    const { classes, ...other } = props;
+    const { classes, auth, ...other } = props;
 
     return (
         <Drawer variant="permanent" {...other}>
@@ -55,29 +56,31 @@ function Navigator(props) {
                                 {id}
                             </ListItemText>
                         </ListItem>
-                        {children.map(({ id: childId, icon, path }) => (
-                            <ListItem
-                                key={childId}
-                                component={NavLink} to={path}
-                                className={clsx(classes.item)}
-                                activeClassName={classes.itemActiveItem}
-                                isActive={(match, location) => {
-                                    if(location.pathname === '/' && path === "/about") {
-                                        return true;
-                                    }
-                                    return match;
-                                }}
-                            >
-                                <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-
-                                <ListItemText
-                                    classes={{
-                                        primary: classes.itemPrimary,
+                        {children.map(({ id: childId, icon, path, isAuth}) => (
+                            <div>
+                                {((auth.name && !isAuth)||(!auth.name))&& <ListItem
+                                    key={childId}
+                                    component={NavLink} to={path}
+                                    className={clsx(classes.item)}
+                                    activeClassName={classes.itemActiveItem}
+                                    isActive={(match, location) => {
+                                        if(location.pathname === '/' && path === "/about") {
+                                            return true;
+                                        }
+                                        return match;
                                     }}
                                 >
-                                    {childId}
-                                </ListItemText>
-                            </ListItem>
+                                    <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+
+                                    <ListItemText
+                                        classes={{
+                                            primary: classes.itemPrimary,
+                                        }}
+                                    >
+                                        {childId}
+                                    </ListItemText>
+                                </ListItem>}
+                            </div>
                         ))}
 
                         <Divider className={classes.divider} />
@@ -88,4 +91,10 @@ function Navigator(props) {
     );
 }
 
-export default withStyles(styles)(Navigator);
+
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication
+    }
+}
+export default connect(mapStateToProps) (withStyles(styles)(Navigator));

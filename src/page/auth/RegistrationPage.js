@@ -12,14 +12,13 @@ import {regEmail, regPassword} from "../../util/Regs";
 import TextInput from "../../component/TextInput";
 import {registrationRequest} from "../../redux/actions/authenticationActions";
 
-function RegistrationPage({auth, registrationRequest, ...props}) {
+function RegistrationPage({auth, registrationRequest, inProgress, ...props}) {
     const {classes} = props;
     const [authentication, setAuthentication] = useState({
         name: '',
         email: '',
         password: '',
-        repeat: '',
-        requestInProcess: false
+        repeat: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -131,10 +130,10 @@ function RegistrationPage({auth, registrationRequest, ...props}) {
                             <Button
                                 className={classes.formItem}
                                 type="submit"
-                                disabled={auth.registering}
+                                disabled={inProgress > 0}
                                 variant="contained"
                                 onChange={handleChange}>
-                                Registration
+                                {inProgress > 0 ? 'Registering...' : 'Registration'}
                             </Button>
                         </form>
                     </Grid>
@@ -147,7 +146,8 @@ function RegistrationPage({auth, registrationRequest, ...props}) {
 
 function mapStateToProps(state) {
     return {
-        auth: state.authentication
+        auth: state.authentication,
+        inProgress: state.apiCallsInProgress
     }
 }
 

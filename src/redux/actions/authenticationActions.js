@@ -1,13 +1,13 @@
 import * as types from './actionTypes';
 
-export function authenticationRequest(credentials) {
-    return { type: types.AUTHENTICATION_REQUEST,  credentials};
+export function authenticationRequest(params) {
+    return { type: types.AUTHENTICATION_REQUEST,  params};
 }
 
 export function logoutRequest() {
     return { type: types.LOG_OUT_REQUEST};
 }
 
-export function registrationRequest(credentials) {
-    return { type: types.REGISTRATION_REQUEST,  credentials};
+export function registrationRequest(params) {
+    return { type: types.REGISTRATION_REQUEST, params};
 }

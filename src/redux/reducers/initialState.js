@@ -2,15 +2,14 @@ const initialState = {
     authentication: {
         name: '',
         restaurant: '',
-        userId: '',
-        logging: false,
-        registering: false
+        userId: ''
     },
     message: {
         type: '',
         text: ''
     },
     tables: [],
-    reserves: []
+    reserves: [],
+    apiCallsInProgress: 0
 };
 export default initialState;
