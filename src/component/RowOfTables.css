@@ -1,0 +1,12 @@
+.row-tables {
+    display: flex;
+    justify-content: space-between;
+}
+.table {
+    background-color: bisque;
+    flex-basis: 6%;
+    min-width: 20px;
+    margin: 10px;
+    height: 20px;
+    cursor: pointer;
+}
