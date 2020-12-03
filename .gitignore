@@ -25,3 +25,4 @@ yarn-error.log*
 .idea
 .eslintcache
 src/api/database.js
+.firebase/hosting.YnVpbGQ.cache
