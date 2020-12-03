@@ -11,7 +11,8 @@ import {
 } from "./userSaga";
 import {
     getTableCollection,
-    addTable
+    addTable,
+    updateTable
 } from "./tableSaga";
 
 function* mySaga() {
@@ -21,5 +22,6 @@ function* mySaga() {
     yield takeLatest(types.USER_UPDATE_REQUEST, updateUserDetails);
     yield takeLatest(types.GET_TABLES_REQUEST, getTableCollection);
     yield takeLatest(types.ADD_TABLE_REQUEST, addTable);
+    yield takeLatest(types.UPDATE_TABLE_REQUEST, updateTable);
 }
 export default mySaga;

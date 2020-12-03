@@ -8,14 +8,14 @@ import {withStyles} from "@material-ui/core/styles";
 import styles from "./EditorPage.style";
 import RowOfTables from "../../component/RowOfTables";
 import TableDialog from "../../component/TableDialog";
-import {getTablesRequest, addTableRequest} from "../../redux/actions/tableActions";
+import {getTablesRequest, addTableRequest, updateTableRequest} from "../../redux/actions/tableActions";
 import {connect} from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function EditorPage(props) {
-    const { classes, inProgress, auth, getTablesRequest, addTableRequest, tables } = props;
-    const [dialog, setDialog] = React.useState({isOpen: false, numberOfSeats: ''});
+    const { classes, inProgress, auth, getTablesRequest, addTableRequest, updateTableRequest, tables } = props;
+    const [dialog, setDialog] = React.useState({isOpen: false, seats: ''});
     const [errors, setErrors] = useState({});
     const vertical = [0,1,2,3,4,5,6,7,8,9];
 
@@ -25,7 +25,31 @@ function EditorPage(props) {
     }, [auth.userId, getTablesRequest, tables]);
 
     const tableClickHandler = (x, y) => {
-        setDialog({...dialog, isOpen: true, x: x, y: y, numberOfSeats: ''});
+        const table = tables.find(t => t.x === x && t.y === y);
+        if (table) {
+            setDialog({
+                ...dialog,
+                isOpen: true,
+                id: table.id,
+                x: x,
+                y: y,
+                seats: table.seats,
+                refNumber: table.refNumber
+            });
+        } else {
+            const max = Math.max.apply(Math, tables.map(o => {
+                return o.refNumber
+            }));
+            setDialog({
+                ...dialog,
+                id: null,
+                isOpen: true,
+                x: x,
+                y: y,
+                seats: '',
+                refNumber: max === -Infinity ? '1' : max + 1
+            });
+        }
     };
     const handleClose = () => {
         setDialog({...dialog, isOpen: false});
@@ -34,28 +58,39 @@ function EditorPage(props) {
     const handleSave = (e) => {
         e.preventDefault();
         if (!isFormValid()) return;
-        addTableRequest({
-            uid: auth.userId, table: {
-                x: dialog.x,
-                y: dialog.y,
-                refNumber: 1,
-                seats: dialog.numberOfSeats
-            }
-        });
+        if(!dialog.id) {
+                addTableRequest({
+                uid: auth.userId, table: {
+                    x: dialog.x,
+                    y: dialog.y,
+                    refNumber: dialog.refNumber,
+                    seats: dialog.seats
+                }
+            });
+        } else {
+            updateTableRequest({
+                uid: auth.userId, table: {
+                    x: dialog.x,
+                    y: dialog.y,
+                    refNumber: dialog.refNumber,
+                    seats: dialog.seats,
+                }, tableId: dialog.id
+            });
+        }
         setDialog({...dialog, isOpen: false});
     };
 
 
     const isFormValid = () => {
-        const { numberOfSeats } = dialog;
+        const { seats } = dialog;
         const errors = {};
 
-        if (!numberOfSeats) {
-            errors.numberOfSeats = "The field is obligatory";
+        if (!seats) {
+            errors.seats = "The field is obligatory";
         }
 
-        if(isNaN(Number(numberOfSeats))) {
-            errors.numberOfSeats = "The number of seats must be a number";
+        if(isNaN(Number(seats))) {
+            errors.seats = "The number of seats must be a number";
         }
 
         setErrors(errors);
@@ -90,7 +125,9 @@ function EditorPage(props) {
                 <div className={classes.contentWrapper}>
                     {
                         vertical.map(y =>
-                            <RowOfTables onTableClick={(x) => tableClickHandler(x, y)} key={y}/>
+                            <RowOfTables onTableClick={(x) => tableClickHandler(x, y)}
+                                         data={tables.filter(table => table.y === y)}
+                                         key={y}/>
                             )
                     }
                 </div> : <div className={classes.progress}><CircularProgress /></div>
@@ -99,10 +136,12 @@ function EditorPage(props) {
                 isOpen={dialog.isOpen}
                 x={dialog.x}
                 y={dialog.y}
+                id={dialog.id}
+                refNumber={dialog.refNumber}
                 errors={errors}
                 handleSave={handleSave}
                 inProgress={inProgress}
-                numberOfSeats={dialog.numberOfSeats}
+                seats={dialog.seats}
                 handleChange={handleChange}
                 handleClose={handleClose}/>
         </Paper>
@@ -120,7 +159,8 @@ function mapStateToProps(state) {
 // noinspection JSUnusedGlobalSymbols
 const mapDispatchToProps = {
     getTablesRequest,
-    addTableRequest
+    addTableRequest,
+    updateTableRequest
 };
 
 export default connect(mapStateToProps, mapDispatchToProps) (withStyles(styles)(EditorPage));

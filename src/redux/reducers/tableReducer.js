@@ -10,6 +10,10 @@ export default function tableReducer(state = initialState.tables, action) {
             return [
                 ...state, action.table
             ];
+        case types.UPDATE_TABLE_SUCCESS:
+            return [
+                ...state.filter(x => x.id !== action.table.id), action.table
+            ];
         default:
             return state;
     }

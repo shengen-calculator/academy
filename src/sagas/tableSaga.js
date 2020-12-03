@@ -23,3 +23,14 @@ export function* addTable(action) {
         yield put({type: types.ADD_TABLE_FAILURE, text: e.message});
     }
 }
+
+export function* updateTable(action) {
+    try {
+        yield put({type: types.BEGIN_API_CALL});
+        yield call(TableApi.updateTable, action.params.uid, action.params.table, action.params.tableId);
+        yield put({type: types.UPDATE_TABLE_SUCCESS, table: {...action.params.table, id: action.params.tableId}});
+    } catch (e) {
+        yield put({type: types.API_CALL_ERROR});
+        yield put({type: types.UPDATE_TABLE_FAILURE, text: e.message});
+    }
+}

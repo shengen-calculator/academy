@@ -9,23 +9,24 @@ import styles from "./TableDialog.style";
 import TextInput from "./TextInput";
 import {withStyles} from "@material-ui/core/styles";
 
-function TableDialog({isOpen, handleClose, handleChange, handleSave, errors, numberOfSeats, ...props}) {
+function TableDialog({isOpen, handleClose, handleChange, handleSave, errors, seats, refNumber, ...props}) {
     const { classes } = props;
     return (
         <Dialog open={isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
             <form className={classes.form} onSubmit={handleSave}>
-                <DialogTitle id="form-dialog-title">Table #3</DialogTitle>
+                <DialogTitle id="form-dialog-title">{`Table #${refNumber}`}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To create new table in you restaurant (or update already existing one), please enter number of seats in form bellow.
+                        To create new table in you restaurant (or update already existing one),
+                        please enter number of seats in form bellow.
                     </DialogContentText>
                     <TextInput
                         className={classes.formItem}
-                        name="numberOfSeats"
+                        name="seats"
                         label="Number of seats"
                         onChange={handleChange}
-                        value={numberOfSeats}
-                        error={errors.numberOfSeats}
+                        value={seats}
+                        error={errors.seats}
                     />
                 </DialogContent>
                 <DialogActions>
