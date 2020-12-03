@@ -8,7 +8,7 @@ const initialState = {
         type: '',
         text: ''
     },
-    tables: [],
+    tables: null,
     reserves: [],
     apiCallsInProgress: 0
 };

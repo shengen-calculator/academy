@@ -9,11 +9,15 @@ import {
 import {
     updateUserDetails
 } from "./userSaga";
+import {
+    getTableCollection
+} from "./tableSaga";
 
 function* mySaga() {
     yield takeLatest(types.LOG_OUT_REQUEST, logOut);
     yield takeLatest(types.AUTHENTICATION_REQUEST, logIn);
     yield takeLatest(types.REGISTRATION_REQUEST, register);
     yield takeLatest(types.USER_UPDATE_REQUEST, updateUserDetails);
+    yield takeLatest(types.GET_TABLES_REQUEST, getTableCollection);
 }
 export default mySaga;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,19 +7,21 @@ import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
 import styles from "./EditorPage.style";
 import RowOfTables from "../../component/RowOfTables";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import Dialog from "@material-ui/core/Dialog";
-import TextField from "@material-ui/core/TextField";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import DialogContentText from "@material-ui/core/DialogContentText";
+import TableDialog from "../../component/TableDialog";
+import {getTablesRequest} from "../../redux/actions/tableActions";
+import {connect} from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function EditorPage(props) {
-    const { classes } = props;
+    const { classes, inProgress, auth, getTablesRequest, tables } = props;
     const [open, setOpen] = React.useState(false);
     const vertical = [0,1,2,3,4,5,6,7,8,9];
+
+    useEffect(() => {
+        if(tables === null)
+            getTablesRequest({uid: auth.userId});
+    }, [auth.userId, getTablesRequest, tables]);
 
     const tableClickHandler = (x, y) => {
         setOpen(true);
@@ -42,41 +44,32 @@ function EditorPage(props) {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <div className={classes.contentWrapper}>
-                {
-                    vertical.map(y =>
-                        <RowOfTables onTableClick={(x) => tableClickHandler(x, y)} key={y}/>
-                        )
-                }
-            </div>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-                <DialogContent>
-                    {/* eslint-disable-next-line react/jsx-no-undef */}
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We will send updates
-                        occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Subscribe
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            {
+                inProgress === 0 && tables !== null ?
+                <div className={classes.contentWrapper}>
+                    {
+                        vertical.map(y =>
+                            <RowOfTables onTableClick={(x) => tableClickHandler(x, y)} key={y}/>
+                            )
+                    }
+                </div> : <div className={classes.progress}><CircularProgress /></div>
+            }
+            <TableDialog isOpen={open} handleClose={handleClose}/>
         </Paper>
     );
 }
 
-export default withStyles(styles)(EditorPage);
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication,
+        inProgress: state.apiCallsInProgress,
+        tables: state.tables
+    }
+}
+
+// noinspection JSUnusedGlobalSymbols
+const mapDispatchToProps = {
+    getTablesRequest
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (withStyles(styles)(EditorPage));
