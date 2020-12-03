@@ -1,39 +1,48 @@
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import React from "react";
+import styles from "./TableDialog.style";
+import TextInput from "./TextInput";
+import {withStyles} from "@material-ui/core/styles";
 
-function TableDialog({isOpen, handleClose}) {
+function TableDialog({isOpen, handleClose, handleChange, handleSave, errors, numberOfSeats, ...props}) {
+    const { classes } = props;
     return (
         <Dialog open={isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    To subscribe to this website, please enter your email address here. We will send updates
-                    occasionally.
-                </DialogContentText>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancel
-                </Button>
-                <Button onClick={handleClose} color="primary">
-                    Subscribe
-                </Button>
-            </DialogActions>
+            <form className={classes.form} onSubmit={handleSave}>
+                <DialogTitle id="form-dialog-title">Table #3</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To create new table in you restaurant (or update already existing one), please enter number of seats in form bellow.
+                    </DialogContentText>
+                    <TextInput
+                        className={classes.formItem}
+                        name="numberOfSeats"
+                        label="Number of seats"
+                        onChange={handleChange}
+                        value={numberOfSeats}
+                        error={errors.numberOfSeats}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleClose}
+                        color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        type="submit"
+                        color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </form>
         </Dialog>
     );
 }
-export default TableDialog;
+
+export default withStyles(styles)(TableDialog);

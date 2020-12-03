@@ -25,6 +25,13 @@ export default function messageReducer(state = initialState.message, action) {
                 type: 'success',
             };
 
+        case types.ADD_TABLE_SUCCESS:
+            return {
+                ...state,
+                text: `Information about table successfully saved`,
+                type: 'success',
+            };
+
         case types.LOG_OUT_SUCCESS:
             return {
                 ...state,
@@ -54,6 +61,13 @@ export default function messageReducer(state = initialState.message, action) {
             };
 
         case types.GET_TABLES_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
+        case types.ADD_TABLE_FAILURE:
             return {
                 ...state,
                 type: 'error',

@@ -10,7 +10,8 @@ import {
     updateUserDetails
 } from "./userSaga";
 import {
-    getTableCollection
+    getTableCollection,
+    addTable
 } from "./tableSaga";
 
 function* mySaga() {
@@ -19,5 +20,6 @@ function* mySaga() {
     yield takeLatest(types.REGISTRATION_REQUEST, register);
     yield takeLatest(types.USER_UPDATE_REQUEST, updateUserDetails);
     yield takeLatest(types.GET_TABLES_REQUEST, getTableCollection);
+    yield takeLatest(types.ADD_TABLE_REQUEST, addTable);
 }
 export default mySaga;

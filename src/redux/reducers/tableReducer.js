@@ -7,9 +7,9 @@ export default function tableReducer(state = initialState.tables, action) {
             return action.tables;
 
         case types.ADD_TABLE_SUCCESS:
-            return {
-                ...state
-            };
+            return [
+                ...state, action.table
+            ];
         default:
             return state;
     }
