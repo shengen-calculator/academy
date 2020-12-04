@@ -45,3 +45,17 @@ export function* deleteTable(action) {
         yield put({type: types.DELETE_TABLE_FAILURE, text: e.message});
     }
 }
+
+
+export function* swapTables(action) {
+    try {
+        yield put({type: types.BEGIN_API_CALL});
+
+        yield call(TableApi.updateTable, action.params.source);
+        yield call(TableApi.updateTable, action.params.dest);
+        yield put({type: types.SWAP_TABLES_SUCCESS});
+    } catch (e) {
+        yield put({type: types.API_CALL_ERROR});
+        yield put({type: types.SWAP_TABLES_FAILURE, text: e.message});
+    }
+}

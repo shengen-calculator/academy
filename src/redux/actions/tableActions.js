@@ -15,3 +15,7 @@ export function updateTableRequest(params) {
 export function deleteTableRequest(params) {
     return { type: types.DELETE_TABLE_REQUEST,  params};
 }
+
+export function swapTablesRequest(params) {
+    return { type: types.SWAP_TABLES_REQUEST,  params};
+}

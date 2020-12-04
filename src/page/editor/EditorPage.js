@@ -12,7 +12,8 @@ import {
     getTablesRequest,
     addTableRequest,
     updateTableRequest,
-    deleteTableRequest
+    deleteTableRequest,
+    swapTablesRequest
 } from "../../redux/actions/tableActions";
 import {connect} from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -27,10 +28,12 @@ function EditorPage(props) {
         addTableRequest,
         updateTableRequest,
         deleteTableRequest,
+        swapTablesRequest,
         tables
     } = props;
     const [dialog, setDialog] = React.useState({isOpen: false, seats: ''});
     const [errors, setErrors] = useState({});
+    const [draggedTable, setDraggedTable] = useState(null);
     const vertical = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     useEffect(() => {
@@ -65,6 +68,44 @@ function EditorPage(props) {
             });
         }
     };
+
+    const tableDragStartHandler = (e, x, y) => {
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData('text/html', e.target.parentNode);
+        e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
+        setDraggedTable({...draggedTable, source: {x: x, y: y}});
+    };
+
+    const tableDragOverHandler = (x, y) => {
+        setDraggedTable({...draggedTable, dest: {x: x, y: y}});
+    };
+
+    const tableDragEndHandler = () => {
+        const source = tables.find(t => t.x === draggedTable.source.x && t.y === draggedTable.source.y);
+        const dest = tables.find(t => t.x === draggedTable.dest.x && t.y === draggedTable.dest.y);
+        swapTablesRequest({
+            source: {
+                uid: auth.userId,
+                table: {
+                    seats: source.seats,
+                    refNumber: source.refNumber,
+                    x: draggedTable.dest.x,
+                    y: draggedTable.dest.y,
+                },
+                tableId: source.id
+            }, dest: {
+                uid: auth.userId,
+                table: {
+                    seats: dest.seats,
+                    refNumber: dest.refNumber,
+                    x: draggedTable.source.x,
+                    y: draggedTable.source.y,
+                },
+                tableId: dest.id
+            }
+        });
+    };
+
 
     const handleDelete = (e) => {
         e.preventDefault();
@@ -142,11 +183,14 @@ function EditorPage(props) {
                 </Toolbar>
             </AppBar>
             {
-                inProgress === 0 && tables !== null ?
+                tables !== null ?
                     <div className={classes.contentWrapper}>
                         {
                             vertical.map(y =>
                                 <RowOfTables onTableClick={(x) => tableClickHandler(x, y)}
+                                             onTableDragOver={(x) => tableDragOverHandler(x, y)}
+                                             onTableDragStart={(e, x,) => tableDragStartHandler(e, x, y)}
+                                             onTableDragEnd={tableDragEndHandler}
                                              data={tables.filter(table => table.y === y)}
                                              key={y}/>
                             )
@@ -183,7 +227,8 @@ const mapDispatchToProps = {
     getTablesRequest,
     addTableRequest,
     updateTableRequest,
-    deleteTableRequest
+    deleteTableRequest,
+    swapTablesRequest
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditorPage));
