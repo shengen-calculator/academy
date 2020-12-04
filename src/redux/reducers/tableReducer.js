@@ -8,11 +8,16 @@ export default function tableReducer(state = initialState.tables, action) {
 
         case types.ADD_TABLE_SUCCESS:
             return [
-                ...state, action.table
+                ...state, {...action.params.table, id: action.table.id}
             ];
         case types.UPDATE_TABLE_SUCCESS:
+            const table = {...action.params.table, id: action.params.tableId};
             return [
-                ...state.filter(x => x.id !== action.table.id), action.table
+                ...state.filter(x => x.id !== action.table.id), table
+            ];
+        case types.DELETE_TABLE_SUCCESS:
+            return [
+                ...state.filter(x => x.id !== action.params.tableId)
             ];
         default:
             return state;

@@ -32,6 +32,13 @@ export default function messageReducer(state = initialState.message, action) {
                 type: 'success',
             };
 
+        case types.DELETE_TABLE_SUCCESS:
+            return {
+                ...state,
+                text: `Table was successfully deleted`,
+                type: 'success',
+            };
+
         case types.UPDATE_TABLE_SUCCESS:
             return {
                 ...state,
@@ -82,6 +89,13 @@ export default function messageReducer(state = initialState.message, action) {
             };
 
         case types.UPDATE_TABLE_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
+        case types.DELETE_TABLE_FAILURE:
             return {
                 ...state,
                 type: 'error',

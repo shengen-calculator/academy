@@ -8,7 +8,7 @@ function RowOfTables({onTableClick, data}) {
         <div className="row-tables">
             {
                 height.map(x => {
-                    const value = data.filter(tab => tab.x === x)[0];
+                    const value = data.find(tab => tab.x === x);
                     return <div key={x} onClick={() => onTableClick(x)} className="table">
                         {value ? value.seats : ''}
                         </div>

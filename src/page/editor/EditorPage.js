@@ -8,19 +8,33 @@ import {withStyles} from "@material-ui/core/styles";
 import styles from "./EditorPage.style";
 import RowOfTables from "../../component/RowOfTables";
 import TableDialog from "../../component/TableDialog";
-import {getTablesRequest, addTableRequest, updateTableRequest} from "../../redux/actions/tableActions";
+import {
+    getTablesRequest,
+    addTableRequest,
+    updateTableRequest,
+    deleteTableRequest
+} from "../../redux/actions/tableActions";
 import {connect} from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function EditorPage(props) {
-    const { classes, inProgress, auth, getTablesRequest, addTableRequest, updateTableRequest, tables } = props;
+    const {
+        classes,
+        inProgress,
+        auth,
+        getTablesRequest,
+        addTableRequest,
+        updateTableRequest,
+        deleteTableRequest,
+        tables
+    } = props;
     const [dialog, setDialog] = React.useState({isOpen: false, seats: ''});
     const [errors, setErrors] = useState({});
-    const vertical = [0,1,2,3,4,5,6,7,8,9];
+    const vertical = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     useEffect(() => {
-        if(tables === null)
+        if (tables === null)
             getTablesRequest({uid: auth.userId});
     }, [auth.userId, getTablesRequest, tables]);
 
@@ -51,6 +65,13 @@ function EditorPage(props) {
             });
         }
     };
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        deleteTableRequest({uid: auth.userId, tableId: dialog.id});
+        setDialog({...dialog, isOpen: false});
+    };
+
     const handleClose = () => {
         setDialog({...dialog, isOpen: false});
     };
@@ -58,8 +79,8 @@ function EditorPage(props) {
     const handleSave = (e) => {
         e.preventDefault();
         if (!isFormValid()) return;
-        if(!dialog.id) {
-                addTableRequest({
+        if (!dialog.id) {
+            addTableRequest({
                 uid: auth.userId, table: {
                     x: dialog.x,
                     y: dialog.y,
@@ -82,14 +103,14 @@ function EditorPage(props) {
 
 
     const isFormValid = () => {
-        const { seats } = dialog;
+        const {seats} = dialog;
         const errors = {};
 
         if (!seats) {
             errors.seats = "The field is obligatory";
         }
 
-        if(isNaN(Number(seats))) {
+        if (isNaN(Number(seats))) {
             errors.seats = "The number of seats must be a number";
         }
 
@@ -122,15 +143,15 @@ function EditorPage(props) {
             </AppBar>
             {
                 inProgress === 0 && tables !== null ?
-                <div className={classes.contentWrapper}>
-                    {
-                        vertical.map(y =>
-                            <RowOfTables onTableClick={(x) => tableClickHandler(x, y)}
-                                         data={tables.filter(table => table.y === y)}
-                                         key={y}/>
+                    <div className={classes.contentWrapper}>
+                        {
+                            vertical.map(y =>
+                                <RowOfTables onTableClick={(x) => tableClickHandler(x, y)}
+                                             data={tables.filter(table => table.y === y)}
+                                             key={y}/>
                             )
-                    }
-                </div> : <div className={classes.progress}><CircularProgress /></div>
+                        }
+                    </div> : <div className={classes.progress}><CircularProgress/></div>
             }
             <TableDialog
                 isOpen={dialog.isOpen}
@@ -140,6 +161,7 @@ function EditorPage(props) {
                 refNumber={dialog.refNumber}
                 errors={errors}
                 handleSave={handleSave}
+                handleDelete={handleDelete}
                 inProgress={inProgress}
                 seats={dialog.seats}
                 handleChange={handleChange}
@@ -160,7 +182,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
     getTablesRequest,
     addTableRequest,
-    updateTableRequest
+    updateTableRequest,
+    deleteTableRequest
 };
 
-export default connect(mapStateToProps, mapDispatchToProps) (withStyles(styles)(EditorPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditorPage));

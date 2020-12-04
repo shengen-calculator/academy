@@ -9,8 +9,19 @@ import styles from "./TableDialog.style";
 import TextInput from "./TextInput";
 import {withStyles} from "@material-ui/core/styles";
 
-function TableDialog({isOpen, handleClose, handleChange, handleSave, errors, seats, refNumber, ...props}) {
-    const { classes } = props;
+function TableDialog({
+                         isOpen,
+                         handleClose,
+                         handleChange,
+                         handleSave,
+                         handleDelete,
+                         errors,
+                         seats,
+                         refNumber,
+                         id,
+                         ...props
+                     }) {
+    const {classes} = props;
     return (
         <Dialog open={isOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
             <form className={classes.form} onSubmit={handleSave}>
@@ -35,6 +46,11 @@ function TableDialog({isOpen, handleClose, handleChange, handleSave, errors, sea
                         color="primary">
                         Cancel
                     </Button>
+                    {id && <Button
+                        onClick={handleDelete}
+                        color="secondary">
+                        Delete
+                    </Button>}
                     <Button
                         type="submit"
                         color="primary">

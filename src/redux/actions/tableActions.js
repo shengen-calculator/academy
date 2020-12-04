@@ -11,3 +11,7 @@ export function addTableRequest(params) {
 export function updateTableRequest(params) {
     return { type: types.UPDATE_TABLE_REQUEST,  params};
 }
+
+export function deleteTableRequest(params) {
+    return { type: types.DELETE_TABLE_REQUEST,  params};
+}
