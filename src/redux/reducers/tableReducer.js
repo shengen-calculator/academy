@@ -19,6 +19,12 @@ export default function tableReducer(state = initialState.tables, action) {
             return [
                 ...state.filter(x => x.id !== action.params.tableId)
             ];
+        case types.SWAP_TABLES_REQUEST:
+            const source = {...action.params.source.table, id: action.params.source.tableId};
+            const dest = {...action.params.dest.table, id: action.params.dest.tableId};
+            return [
+                ...state.filter(x => x.id !== source.id && x.id !== dest.id ), source, dest
+            ];
         default:
             return state;
     }

@@ -13,7 +13,7 @@ class TableApi {
 
     static updateTable({uid, table, tableId}) {
         const userRef = firestore.doc(`users/${uid}/tables/${tableId}`);
-        return userRef.set(table);
+        return userRef.set(table, { merge: true });
     }
 
     static getTables({uid}) {

@@ -102,6 +102,13 @@ export default function messageReducer(state = initialState.message, action) {
                 text: action.text
             };
 
+        case types.SWAP_TABLES_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
         default:
             return state;
     }

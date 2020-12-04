@@ -13,7 +13,8 @@ import {
     getTableCollection,
     addTable,
     updateTable,
-    deleteTable
+    deleteTable,
+    swapTables
 } from "./tableSaga";
 
 function* mySaga() {
@@ -25,5 +26,6 @@ function* mySaga() {
     yield takeLatest(types.ADD_TABLE_REQUEST, addTable);
     yield takeLatest(types.UPDATE_TABLE_REQUEST, updateTable);
     yield takeLatest(types.DELETE_TABLE_REQUEST, deleteTable);
+    yield takeLatest(types.SWAP_TABLES_REQUEST, swapTables);
 }
 export default mySaga;

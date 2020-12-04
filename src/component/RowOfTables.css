@@ -2,11 +2,14 @@
     display: flex;
     justify-content: space-between;
 }
-.table {
-    background-color: bisque;
+.table-shell {
+    background-color: green;
     flex-basis: 6%;
     min-width: 20px;
     margin: 10px;
+}
+.table {
+    background-color: bisque;
     height: 20px;
     cursor: pointer;
     text-align: center;
