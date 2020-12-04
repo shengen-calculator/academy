@@ -69,28 +69,27 @@ function EditorPage(props) {
         }
     };
 
-    const tableDragStartHandler = (e, x, y) => {
+    const tableDragStartHandler = (e, x, y, tableId) => {
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData('text/html', e.target.parentNode);
         e.dataTransfer.setDragImage(e.target.parentNode, 20, 20);
-        setDraggedTable({...draggedTable, source: {x: x, y: y}});
+        setDraggedTable({...draggedTable, source: {x: x, y: y, tableId: tableId}});
     };
 
-    const tableDragOverHandler = (x, y) => {
-        setDraggedTable({...draggedTable, dest: {x: x, y: y}});
-    };
-
-    const tableDragEndHandler = () => {
+    const tableDragOverHandler = (e, x, y) => {
+        e.preventDefault();
         const source = tables.find(t => t.x === draggedTable.source.x && t.y === draggedTable.source.y);
-        const dest = tables.find(t => t.x === draggedTable.dest.x && t.y === draggedTable.dest.y);
+        const dest = tables.find(t => t.x === x && t.y === y);
+        if(dest.id === draggedTable.source.tableId) return;
+        console.log(`over -> ${x} - ${y}`);
         swapTablesRequest({
             source: {
                 uid: auth.userId,
                 table: {
                     seats: source.seats,
                     refNumber: source.refNumber,
-                    x: draggedTable.dest.x,
-                    y: draggedTable.dest.y,
+                    x: x,
+                    y: y,
                 },
                 tableId: source.id
             }, dest: {
@@ -105,6 +104,7 @@ function EditorPage(props) {
             }
         });
     };
+
 
 
     const handleDelete = (e) => {
@@ -188,9 +188,8 @@ function EditorPage(props) {
                         {
                             vertical.map(y =>
                                 <RowOfTables onTableClick={(x) => tableClickHandler(x, y)}
-                                             onTableDragOver={(x) => tableDragOverHandler(x, y)}
-                                             onTableDragStart={(e, x,) => tableDragStartHandler(e, x, y)}
-                                             onTableDragEnd={tableDragEndHandler}
+                                             onTableDragOver={(e, x) => tableDragOverHandler(e, x, y)}
+                                             onTableDragStart={(e, x, tableId) => tableDragStartHandler(e, x, y, tableId)}
                                              data={tables.filter(table => table.y === y)}
                                              key={y}/>
                             )
