@@ -28,7 +28,7 @@ export function* updateTable(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
         yield call(TableApi.updateTable, action.params);
-        yield put({type: types.UPDATE_TABLE_SUCCESS, action});
+        yield put({type: types.UPDATE_TABLE_SUCCESS, params: action.params});
     } catch (e) {
         yield put({type: types.API_CALL_ERROR});
         yield put({type: types.UPDATE_TABLE_FAILURE, text: e.message});
@@ -39,7 +39,7 @@ export function* deleteTable(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
         yield call(TableApi.deleteTable, action.params);
-        yield put({type: types.DELETE_TABLE_SUCCESS, action});
+        yield put({type: types.DELETE_TABLE_SUCCESS, params: action.params});
     } catch (e) {
         yield put({type: types.API_CALL_ERROR});
         yield put({type: types.DELETE_TABLE_FAILURE, text: e.message});
