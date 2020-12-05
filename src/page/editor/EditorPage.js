@@ -84,21 +84,21 @@ function EditorPage(props) {
             source: {
                 uid: auth.userId,
                 table: {
-                    seats: source.seats,
-                    refNumber: source.refNumber,
+                    seats: source ? source.seats : null,
+                    refNumber: source ? source.refNumber : null,
                     x: draggedTable.dest.x,
                     y: draggedTable.dest.y,
                 },
-                tableId: source.id
+                tableId: source ? source.id : null
             }, dest: {
                 uid: auth.userId,
                 table: {
-                    seats: dest.seats,
-                    refNumber: dest.refNumber,
+                    seats: dest ? dest.seats : null,
+                    refNumber: dest ? dest.refNumber : null,
                     x: draggedTable.source.x,
                     y: draggedTable.source.y,
                 },
-                tableId: dest.id
+                tableId: dest ? dest.id : null
             }
         });
     };
