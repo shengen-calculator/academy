@@ -15,6 +15,7 @@ import {
     deleteTableRequest,
     swapTablesRequest
 } from "../../redux/actions/tableActions";
+import {vertical} from "../../util/Tables";
 import {connect} from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -22,7 +23,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 function EditorPage(props) {
     const {
         classes,
-        inProgress,
         auth,
         getTablesRequest,
         addTableRequest,
@@ -34,7 +34,6 @@ function EditorPage(props) {
     const [dialog, setDialog] = React.useState({isOpen: false, seats: ''});
     const [errors, setErrors] = useState({});
     const [draggedTable, setDraggedTable] = useState(null);
-    const vertical = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     useEffect(() => {
         if (tables === null)
@@ -200,6 +199,7 @@ function EditorPage(props) {
                                              onTableDragOver={(e, x) => tableDragOverHandler(e, x, y)}
                                              onTableDragStart={(e, x) => tableDragStartHandler(e, x, y)}
                                              onTableDragEnd={tableDragEndHandler}
+                                             isDraggable={true}
                                              data={tables.filter(table => table.y === y)}
                                              key={y}/>
                             )
@@ -215,7 +215,6 @@ function EditorPage(props) {
                 errors={errors}
                 handleSave={handleSave}
                 handleDelete={handleDelete}
-                inProgress={inProgress}
                 seats={dialog.seats}
                 handleChange={handleChange}
                 handleClose={handleClose}/>
@@ -226,7 +225,6 @@ function EditorPage(props) {
 function mapStateToProps(state) {
     return {
         auth: state.authentication,
-        inProgress: state.apiCallsInProgress,
         tables: state.tables
     }
 }

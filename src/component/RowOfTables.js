@@ -1,20 +1,19 @@
 import React from 'react';
 import './RowOfTables.style.css';
+import {horizontal} from "../util/Tables";
 
-function RowOfTables({onTableClick, onTableDragStart, onTableDragOver, onTableDragEnd, data}) {
-    const height = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-
+function RowOfTables({onTableClick, onTableDragStart, onTableDragOver, onTableDragEnd, data, isDraggable}) {
     return (
         <div className="row-tables">
             {
-                height.map(x => {
+                horizontal.map(x => {
                     const value = data.find(tab => tab.x === x);
                     return <div key={x}
-                                className="table-shell"
+                                className={isDraggable ? "table-shell-green" : "table-shell-purple"}
                                 onDragOver={(e) => onTableDragOver(e, x)}
 
                     >
-                        <div draggable
+                        <div draggable={isDraggable}
                              onClick={() => onTableClick(x)}
                              onDragStart={(e) => onTableDragStart(e, x)}
                              className="table"

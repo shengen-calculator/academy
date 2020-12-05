@@ -2,8 +2,14 @@
     display: flex;
     justify-content: space-between;
 }
-.table-shell {
+.table-shell-green {
     background-color: green;
+    flex-basis: 6%;
+    min-width: 20px;
+    margin: 5px;
+}
+.table-shell-purple {
+    background-color: mediumpurple;
     flex-basis: 6%;
     min-width: 20px;
     margin: 5px;
