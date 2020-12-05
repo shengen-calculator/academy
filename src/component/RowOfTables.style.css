@@ -3,13 +3,14 @@
     justify-content: space-between;
 }
 .table-shell {
+    background-color: green;
     flex-basis: 6%;
     min-width: 20px;
-    padding: 1px;
     margin: 5px;
 }
 .table {
     background-color: bisque;
+    margin: 2px;
     height: 20px;
     cursor: pointer;
     text-align: center;
