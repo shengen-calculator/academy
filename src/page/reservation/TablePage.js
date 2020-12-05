@@ -6,12 +6,25 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import {withStyles} from "@material-ui/core/styles";
 import {useParams} from "react-router-dom";
+import {useHistory} from "react-router-dom";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import styles from "./TablePage.style";
+import Button from "@material-ui/core/Button";
 
 
 function TablePage(props) {
     const { classes } = props;
     let { number } = useParams();
+    const history = useHistory();
+
+    const goBack = () => {
+        history.push(`/reservation`);
+    };
+
+    const openReserveDialog = () => {
+
+    };
 
     return (
         <Paper className={classes.paper}>
@@ -27,9 +40,23 @@ function TablePage(props) {
                 </Toolbar>
             </AppBar>
             <div className={classes.contentWrapper}>
-                <Typography color="textSecondary" align="center">
-                    Table page
-                </Typography>
+                <Button
+                    color="primary"
+                    className={classes.button}
+                    onClick={goBack}
+                    startIcon={<ArrowBackIosIcon />}
+                >
+                    Go Back
+                </Button>
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={openReserveDialog}
+                    startIcon={<LibraryAddIcon />}
+                >
+                    Reserve
+                </Button>
             </div>
         </Paper>
     );

@@ -18,7 +18,9 @@ const styles = (theme) => ({
         marginRight: theme.spacing(1),
     },
     contentWrapper: {
-        margin: '40px 16px',
+        margin: '20px 16px',
+        justifyContent: 'space-between',
+        display: 'flex'
     },
 });
 export default styles;
