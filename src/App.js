@@ -22,6 +22,10 @@ import RegistrationPage from "./page/auth/RegistrationPage";
 import LoginPage from "./page/auth/LoginPage";
 import RestaurantNamePage from "./page/auth/RestaurantNamePage";
 import PrivateRoute from "./component/PrivateRoute";
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider
+} from '@material-ui/pickers';
 import {connect} from "react-redux";
 
 function Copyright() {
@@ -47,25 +51,26 @@ function Paperbase(props) {
     };
 
     return (
-        <ThemeProvider theme={theme}>
-            <Router>
-                <div className={classes.root}>
-                    <CssBaseline/>
-                    <nav className={classes.drawer}>
-                        <Hidden smUp implementation="js">
-                            <Navigator
-                                PaperProps={{style: {width: drawerWidth}}}
-                                variant="temporary"
-                                open={mobileOpen}
-                                auth={auth}
-                                onClose={handleDrawerToggle}
-                            />
-                        </Hidden>
-                        <Hidden xsDown implementation="css">
-                            <Navigator auth={auth} PaperProps={{style: {width: drawerWidth}}}/>
-                        </Hidden>
-                    </nav>
-                    <div className={classes.app}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <ThemeProvider theme={theme}>
+                <Router>
+                    <div className={classes.root}>
+                        <CssBaseline/>
+                        <nav className={classes.drawer}>
+                            <Hidden smUp implementation="js">
+                                <Navigator
+                                    PaperProps={{style: {width: drawerWidth}}}
+                                    variant="temporary"
+                                    open={mobileOpen}
+                                    auth={auth}
+                                    onClose={handleDrawerToggle}
+                                />
+                            </Hidden>
+                            <Hidden xsDown implementation="css">
+                                <Navigator auth={auth} PaperProps={{style: {width: drawerWidth}}}/>
+                            </Hidden>
+                        </nav>
+                        <div className={classes.app}>
                             <Switch>
                                 <Route exact path="/">
                                     <Header text="About Page" onDrawerToggle={handleDrawerToggle}/>
@@ -123,13 +128,14 @@ function Paperbase(props) {
                                 </Route>
                             </Switch>
 
-                        <footer className={classes.footer}>
-                            <Copyright/>
-                        </footer>
+                            <footer className={classes.footer}>
+                                <Copyright/>
+                            </footer>
+                        </div>
                     </div>
-                </div>
-            </Router>
-        </ThemeProvider>
+                </Router>
+            </ThemeProvider>
+        </MuiPickersUtilsProvider>
     );
 }
 
@@ -139,4 +145,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps) (withStyles(styles)(Paperbase));
+export default connect(mapStateToProps)(withStyles(styles)(Paperbase));
