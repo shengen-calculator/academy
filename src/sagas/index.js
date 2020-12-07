@@ -18,7 +18,9 @@ import {
 } from "./tableSaga";
 import {
     addReserve,
-    getReserves
+    getReserves,
+    getPastReserves,
+    getFutureReserves
 } from "./reserveSaga";
 
 function* mySaga() {
@@ -32,8 +34,8 @@ function* mySaga() {
     yield takeLatest(types.DELETE_TABLE_REQUEST, deleteTable);
     yield takeLatest(types.SWAP_TABLES_REQUEST, swapTables);
     yield takeLatest(types.ADD_RESERVE_REQUEST, addReserve);
-    yield takeLatest(types.GET_PAST_RESERVES_REQUEST, getReserves);
-    yield takeLatest(types.GET_FUTURE_RESERVES_REQUEST, getReserves);
+    yield takeLatest(types.GET_PAST_RESERVES_REQUEST, getPastReserves);
+    yield takeLatest(types.GET_FUTURE_RESERVES_REQUEST, getFutureReserves);
     yield takeLatest(types.GET_RESERVES_REQUEST, getReserves);
 }
 export default mySaga;

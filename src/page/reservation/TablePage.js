@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -12,12 +12,28 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import styles from "./TablePage.style";
 import Button from "@material-ui/core/Button";
 import ReserveDialog from "../../component/ReserveDialog";
-import {addReserveRequest} from "../../redux/actions/reserveActions";
+import {
+    addReserveRequest,
+    getFutureReservesRequest,
+    getPastReservesRequest
+} from "../../redux/actions/reserveActions";
 import {connect} from "react-redux";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import TableOfReserves from "../../component/TableOfReserves";
 
 
 function TablePage(props) {
-    const {classes, addReserveRequest, auth} = props;
+    const {
+        classes,
+        addReserveRequest,
+        auth,
+        getFutureReservesRequest,
+        getPastReservesRequest,
+        reserves
+    } = props;
     let {number} = useParams();
     const history = useHistory();
     const [dialog, setDialog] = React.useState({
@@ -27,7 +43,26 @@ function TablePage(props) {
         date: new Date(),
         timeSlot: ''
     });
+
+    const [filter, setFilter] = useState({isFuture: "true"});
+
     const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if(filter.isFuture === "true" && !reserves.future) {
+            getFutureReservesRequest({uid: auth.userId, tableRef: number});
+        } else if(filter.isFuture === "false" && !reserves.past) {
+            getPastReservesRequest({uid: auth.userId, tableRef: number});
+        }
+    }, [
+        getFutureReservesRequest,
+        getPastReservesRequest,
+        filter.isFuture,
+        reserves.future,
+        reserves.past,
+        auth.userId,
+        number
+    ]);
 
     const goBack = () => {
         history.push(`/reservation`);
@@ -36,6 +71,14 @@ function TablePage(props) {
     const handleChange = (event) => {
         const {name, value} = event.target;
         setDialog(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleFilterChange = (event) => {
+        const {name, value} = event.target;
+        setFilter(prev => ({
             ...prev,
             [name]: value
         }));
@@ -102,8 +145,27 @@ function TablePage(props) {
     };
 
     const handleClose = () => {
-        setDialog({...dialog, isOpen: false});
+        setDialog({
+            ...dialog,
+            isOpen: false,
+            phoneNumber: '',
+            customerName: '',
+            date: new Date(),
+            timeSlot: ''
+        });
     };
+
+    function createData(name, calories, fat, carbs, protein) {
+        return { name, calories, fat, carbs, protein };
+    }
+
+    const rows = [
+        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+        createData('Eclair', 262, 16.0, 24, 6.0),
+        createData('Cupcake', 305, 3.7, 67, 4.3),
+        createData('Gingerbread', 356, 16.0, 49, 3.9),
+    ];
 
     return (
         <Paper className={classes.paper}>
@@ -119,14 +181,16 @@ function TablePage(props) {
                 </Toolbar>
             </AppBar>
             <div className={classes.contentWrapper}>
-                <Button
-                    color="primary"
-                    className={classes.button}
-                    onClick={goBack}
-                    startIcon={<ArrowBackIosIcon/>}
-                >
-                    Go Back
-                </Button>
+                <div>
+                    <Button
+                        color="primary"
+                        className={classes.button}
+                        onClick={goBack}
+                        startIcon={<ArrowBackIosIcon/>}
+                    >
+                        Go Back
+                    </Button>
+                </div>
                 <Button
                     variant="contained"
                     color="secondary"
@@ -136,6 +200,33 @@ function TablePage(props) {
                 >
                     Reserve
                 </Button>
+            </div>
+            <div className={classes.filterWrapper}>
+                <FormControl className={classes.filter}>
+                    <InputLabel htmlFor="age-native-simple">Show only</InputLabel>
+                    <Select
+                        native
+                        value={filter.isFuture}
+                        onChange={handleFilterChange}
+                        defaultValue={true}
+                        inputProps={{
+                            name: 'isFuture',
+                            id: 'isFuture',
+                        }}
+                    >
+                        <option value={true}>Future Reserves</option>
+                        <option value={false}>Past Reserves</option>
+                    </Select>
+                </FormControl>
+            </div>
+            <div className={classes.contentWrapper}>
+                {filter.isFuture === "true" ?
+                    (reserves.future ? <TableOfReserves rows={rows}/> :
+                        <div className={classes.progress}><CircularProgress/></div>)
+                    :
+                    (reserves.past ? <TableOfReserves rows={rows}/> :
+                        <div className={classes.progress}><CircularProgress/></div>)
+                }
             </div>
             <ReserveDialog
                 isOpen={dialog.isOpen}
@@ -156,13 +247,16 @@ function TablePage(props) {
 
 function mapStateToProps(state) {
     return {
-        auth: state.authentication
+        auth: state.authentication,
+        reserves: state.reserves
     }
 }
 
 // noinspection JSUnusedGlobalSymbols
 const mapDispatchToProps = {
-    addReserveRequest
+    addReserveRequest,
+    getFutureReservesRequest,
+    getPastReservesRequest
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TablePage));

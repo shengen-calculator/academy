@@ -36,7 +36,6 @@ function ReservationPage(props) {
         if(table) {
             history.push(`reservation/table/${table.refNumber}`);
         }
-
     };
 
     return (

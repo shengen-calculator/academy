@@ -22,5 +22,20 @@ const styles = (theme) => ({
         justifyContent: 'space-between',
         display: 'flex'
     },
+    filterWrapper: {
+        margin: '30px 16px',
+        justifyContent: 'flex-end',
+        display: 'flex'
+    },
+    filter: {
+        width: 250
+    },
+    progress: {
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: 236,
+        width: '100%'
+    }
 });
 export default styles;
