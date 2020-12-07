@@ -12,17 +12,20 @@ import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import styles from "./TablePage.style";
 import Button from "@material-ui/core/Button";
 import ReserveDialog from "../../component/ReserveDialog";
+import {addReserveRequest} from "../../redux/actions/reserveActions";
+import {connect} from "react-redux";
 
 
 function TablePage(props) {
-    const { classes } = props;
-    let { number } = useParams();
+    const {classes, addReserveRequest, auth} = props;
+    let {number} = useParams();
     const history = useHistory();
     const [dialog, setDialog] = React.useState({
         isOpen: false,
         phoneNumber: '',
         customerName: '',
-        date:''
+        date: new Date(),
+        timeSlot: ''
     });
     const [errors, setErrors] = useState({});
 
@@ -38,8 +41,54 @@ function TablePage(props) {
         }));
     };
 
-    const handleSave = () => {
+    const reserveDateHandleChange = (value) => {
+        setDialog({...dialog, date: value});
+    };
 
+    const handleSave = (e) => {
+        e.preventDefault();
+        if (!isFormValid()) return;
+        addReserveRequest({
+            uid: auth.userId,
+            reserve: {
+                date: dialog.date,
+                name: dialog.customerName,
+                phone: dialog.phoneNumber,
+                tableRef: number,
+                slot: dialog.timeSlot
+            }
+        });
+        setDialog({
+            ...dialog,
+            isOpen: false,
+            phoneNumber: '',
+            customerName: '',
+            date: new Date(),
+            timeSlot: ''
+        });
+    };
+
+
+    const isFormValid = () => {
+
+        const errors = {};
+        const {phoneNumber, customerName, timeSlot} = dialog;
+
+        if (!phoneNumber) {
+            errors.phoneNumber = "The customer phone number is obligatory field";
+        }
+
+        if (!customerName) {
+            errors.customerName = "The customer name field is obligatory field";
+        }
+
+        if (!timeSlot) {
+            errors.timeSlot = "Please select time slot";
+        }
+
+        setErrors(errors);
+        // Form is valid if the errors object still has no properties
+        return Object.keys(errors).length === 0;
     };
 
     const handleDelete = () => {
@@ -47,6 +96,7 @@ function TablePage(props) {
     };
 
     const openReserveDialog = () => {
+        setErrors({});
         setDialog({...dialog, isOpen: true});
 
     };
@@ -73,7 +123,7 @@ function TablePage(props) {
                     color="primary"
                     className={classes.button}
                     onClick={goBack}
-                    startIcon={<ArrowBackIosIcon />}
+                    startIcon={<ArrowBackIosIcon/>}
                 >
                     Go Back
                 </Button>
@@ -82,25 +132,37 @@ function TablePage(props) {
                     color="secondary"
                     className={classes.button}
                     onClick={openReserveDialog}
-                    startIcon={<LibraryAddIcon />}
+                    startIcon={<LibraryAddIcon/>}
                 >
                     Reserve
                 </Button>
             </div>
             <ReserveDialog
                 isOpen={dialog.isOpen}
-                x={dialog.x}
-                y={dialog.y}
-                id={dialog.id}
-                refNumber={dialog.refNumber}
+                refNumber={number}
+                date={dialog.date}
+                customerName={dialog.customerName}
+                phoneNumber={dialog.phoneNumber}
+                timeSlot={dialog.timeSlot}
                 errors={errors}
                 handleSave={handleSave}
                 handleDelete={handleDelete}
-                seats={dialog.seats}
                 handleChange={handleChange}
+                reserveDateHandleChange={reserveDateHandleChange}
                 handleClose={handleClose}/>
         </Paper>
     );
 }
 
-export default withStyles(styles)(TablePage);
+function mapStateToProps(state) {
+    return {
+        auth: state.authentication
+    }
+}
+
+// noinspection JSUnusedGlobalSymbols
+const mapDispatchToProps = {
+    addReserveRequest
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TablePage));

@@ -8,6 +8,10 @@ service cloud.firestore {
         allow read, update, delete: if request.auth != null && request.auth.uid == userId;
       	allow create: if request.auth != null;
       }
+      match /reserves/{reserveId} {
+        allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      	allow create: if request.auth != null;
+      }
     }
   }
 }
