@@ -9,7 +9,11 @@ const initialState = {
         text: ''
     },
     tables: null,
-    reserves: [],
+    reserves: {
+        past: null,
+        future: null,
+        report: null
+    },
     apiCallsInProgress: 0
 };
 export default initialState;
