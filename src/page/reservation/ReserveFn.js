@@ -43,10 +43,15 @@ export const getPossibleSlots = (futureReserves, date) => {
             label: timeSlots[x].label
         }
     });
+
     if(dateFns.isSameDay(date, new Date())) {
         const startDate = dateFns.startOfDay(new Date());
         const diff = dateFns.getDiff(new Date(), startDate)/60000;
         slots = slots.filter(x => x.min > diff);
     }
+    const reserved = futureReserves.items.filter(x =>
+        dateFns.isSameDay(date, x.date.toDate())).map(y => y.slot);
+    slots = slots.filter(x => !reserved.includes(x.min));
+
     return slots;
 };
