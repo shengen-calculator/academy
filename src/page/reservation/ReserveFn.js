@@ -1,4 +1,5 @@
 import DateFnsAdapter from "@date-io/date-fns";
+import {timeSlots} from "../../util/TimeSlots";
 
 export const isFutureSlot = (item) => {
     const dateFns = new DateFnsAdapter();
@@ -9,7 +10,6 @@ export const isFutureSlot = (item) => {
     }
     return true;
 };
-
 
 export const isPastSlot = (item) => {
     const dateFns = new DateFnsAdapter();
@@ -33,4 +33,20 @@ export const compareItems = (x, y) => {
         return x.slot > y.slot ? 1 : -1;
     }
     return dateFns.getDiff(xDate,yDate) > 0 ? 1 : -1;
+};
+
+export const getPossibleSlots = (futureReserves, date) => {
+    const dateFns = new DateFnsAdapter();
+    let slots = Object.keys(timeSlots).map(x => {
+        return {
+            min: timeSlots[x].min,
+            label: timeSlots[x].label
+        }
+    });
+    if(dateFns.isSameDay(date, new Date())) {
+        const startDate = dateFns.startOfDay(new Date());
+        const diff = dateFns.getDiff(new Date(), startDate)/60000;
+        slots = slots.filter(x => x.min > diff);
+    }
+    return slots;
 };

@@ -23,7 +23,7 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TableOfReserves from "../../component/TableOfReserves";
-import {compareItems, isFutureSlot, isPastSlot} from "./ReserveFn";
+import {compareItems, isFutureSlot, isPastSlot, getPossibleSlots} from "./ReserveFn";
 
 
 function TablePage(props) {
@@ -64,8 +64,6 @@ function TablePage(props) {
         auth.userId,
         number
     ]);
-
-
 
     const goBack = () => {
         history.push(`/reservation`);
@@ -240,6 +238,7 @@ function TablePage(props) {
                 handleDelete={handleDelete}
                 handleChange={handleChange}
                 reserveDateHandleChange={reserveDateHandleChange}
+                getPossibleSlots={() => getPossibleSlots(reserves.future, dialog.date)}
                 handleClose={handleClose}/>
         </Paper>
     );

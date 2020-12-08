@@ -15,8 +15,6 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import {timeSlots} from "../util/TimeSlots";
-
 
 function ReserveDialog({
                            isOpen,
@@ -31,6 +29,7 @@ function ReserveDialog({
                            reserveDateHandleChange,
                            handleClose,
                            handleDelete,
+                           getPossibleSlots,
 
                            id,
                            ...props
@@ -66,8 +65,11 @@ function ReserveDialog({
                             >
                                 <option aria-label="None" value="" />
                                 {
-                                    Object.keys(timeSlots).map(x => {
-                                        return (<option key={x} value={timeSlots[x].min}>{timeSlots[x].label}</option>)
+                                    getPossibleSlots().map(x => {
+                                        return (
+                                            <option key={x.min} value={x.min}>
+                                                {x.label}
+                                            </option>)
                                     })
                                 }
                             </Select>
