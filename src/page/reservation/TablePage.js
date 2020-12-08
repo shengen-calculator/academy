@@ -155,18 +155,6 @@ function TablePage(props) {
         });
     };
 
-    function createData(name, calories, fat, carbs, protein) {
-        return { name, calories, fat, carbs, protein };
-    }
-
-    const rows = [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-    ];
-
     return (
         <Paper className={classes.paper}>
             <AppBar className={classes.searchBar} position="static" color="default" elevation={0}>
@@ -198,7 +186,7 @@ function TablePage(props) {
                     onClick={openReserveDialog}
                     startIcon={<LibraryAddIcon/>}
                 >
-                    Reserve
+                    New Reserve
                 </Button>
             </div>
             <div className={classes.filterWrapper}>
@@ -208,7 +196,6 @@ function TablePage(props) {
                         native
                         value={filter.isFuture}
                         onChange={handleFilterChange}
-                        defaultValue={true}
                         inputProps={{
                             name: 'isFuture',
                             id: 'isFuture',
@@ -221,10 +208,12 @@ function TablePage(props) {
             </div>
             <div className={classes.contentWrapper}>
                 {filter.isFuture === "true" ?
-                    (reserves.future.tableRef === number ? <TableOfReserves rows={rows}/> :
+                    (reserves.future.tableRef === number ?
+                        <TableOfReserves rows={reserves.future.items} onEditClick={openReserveDialog}/> :
                         <div className={classes.progress}><CircularProgress/></div>)
                     :
-                    (reserves.past.tableRef === number ? <TableOfReserves rows={rows}/> :
+                    (reserves.past.tableRef === number ?
+                        <TableOfReserves rows={reserves.past.items} onEditClick={openReserveDialog}/> :
                         <div className={classes.progress}><CircularProgress/></div>)
                 }
             </div>
