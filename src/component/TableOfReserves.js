@@ -16,6 +16,7 @@ function TableOfReserves(props) {
     const {
         rows,
         onEditClick,
+        isEditable,
         classes
     } = props;
     const dateFns = new DateFnsAdapter();
@@ -28,7 +29,7 @@ function TableOfReserves(props) {
                         <TableCell align="right">Time&nbsp;slot</TableCell>
                         <TableCell align="right">Customer&nbsp;name</TableCell>
                         <TableCell align="right">Customer&nbsp;phone</TableCell>
-                        <TableCell align="right"></TableCell>
+                        {isEditable && <TableCell align="right"></TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -42,14 +43,14 @@ function TableOfReserves(props) {
                             </TableCell>
                             <TableCell align="right">{row.name}</TableCell>
                             <TableCell align="right">{row.phone}</TableCell>
-                            <TableCell align="right">
+                            {isEditable && <TableCell align="right">
                                 <Button
                                     color="primary"
                                     className={classes.button}
                                     onClick={onEditClick}>
                                     Edit
                                 </Button>
-                            </TableCell>
+                            </TableCell>}
                         </TableRow>
                     ))}
                 </TableBody>

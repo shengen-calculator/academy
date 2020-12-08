@@ -215,6 +215,7 @@ function TablePage(props) {
                         <TableOfReserves
                             rows={reserves.future.items.filter(x => isFutureSlot(x)).sort(compareItems)}
                             onEditClick={openReserveDialog}
+                            isEditable={true}
                         /> :
                         <div className={classes.progress}><CircularProgress/></div>)
                     :
@@ -222,6 +223,7 @@ function TablePage(props) {
                         <TableOfReserves
                             rows={reserves.past.items.filter(x => isPastSlot(x)).sort(compareItems)}
                             onEditClick={openReserveDialog}
+                            isEditable={false}
                         /> :
                         <div className={classes.progress}><CircularProgress/></div>)
                 }
