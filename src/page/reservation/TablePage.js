@@ -23,7 +23,7 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TableOfReserves from "../../component/TableOfReserves";
-import DateFnsAdapter from "@date-io/date-fns";
+import {compareItems, isFutureSlot, isPastSlot} from "./ReserveFn";
 
 
 function TablePage(props) {
@@ -65,30 +65,6 @@ function TablePage(props) {
         number
     ]);
 
-    const isFutureSlot = (item) => {
-        const dateFns = new DateFnsAdapter();
-        const startDate = dateFns.startOfDay(new Date());
-        if(dateFns.isSameDay(item.date.toDate(), startDate)) {
-            const diff = dateFns.getDiff(new Date(), startDate)/60000;
-            return diff < item.slot;
-        }
-        return true;
-    };
-
-
-    const isPastSlot = (item) => {
-        const dateFns = new DateFnsAdapter();
-        const startDate = dateFns.startOfDay(new Date());
-        if(dateFns.isSameDay(item.date, startDate)) {
-            const diff = dateFns.getDiff(new Date(), startDate)/60000;
-            return diff > item.slot;
-        }
-        return true;
-    };
-
-    const compareItems = (x, y) => {
-
-    };
 
 
     const goBack = () => {
@@ -237,14 +213,14 @@ function TablePage(props) {
                 {filter.isFuture === "true" ?
                     (reserves.future.tableRef === Number(number) ?
                         <TableOfReserves
-                            rows={reserves.future.items.filter(x => isFutureSlot(x))}
+                            rows={reserves.future.items.filter(x => isFutureSlot(x)).sort(compareItems)}
                             onEditClick={openReserveDialog}
                         /> :
                         <div className={classes.progress}><CircularProgress/></div>)
                     :
                     (reserves.past.tableRef === Number(number) ?
                         <TableOfReserves
-                            rows={reserves.past.items.filter(x => isPastSlot(x))}
+                            rows={reserves.past.items.filter(x => isPastSlot(x)).sort(compareItems)}
                             onEditClick={openReserveDialog}
                         /> :
                         <div className={classes.progress}><CircularProgress/></div>)
