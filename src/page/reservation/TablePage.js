@@ -49,17 +49,17 @@ function TablePage(props) {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        if(filter.isFuture === "true" && !reserves.future) {
+        if(filter.isFuture === "true" && reserves.future.tableRef !== number) {
             getFutureReservesRequest({uid: auth.userId, tableRef: number});
-        } else if(filter.isFuture === "false" && !reserves.past) {
+        } else if(filter.isFuture === "false" && reserves.past.tableRef !== number) {
             getPastReservesRequest({uid: auth.userId, tableRef: number});
         }
     }, [
         getFutureReservesRequest,
         getPastReservesRequest,
+        reserves.future.tableRef,
+        reserves.past.tableRef,
         filter.isFuture,
-        reserves.future,
-        reserves.past,
         auth.userId,
         number
     ]);
@@ -221,10 +221,10 @@ function TablePage(props) {
             </div>
             <div className={classes.contentWrapper}>
                 {filter.isFuture === "true" ?
-                    (reserves.future ? <TableOfReserves rows={rows}/> :
+                    (reserves.future.tableRef === number ? <TableOfReserves rows={rows}/> :
                         <div className={classes.progress}><CircularProgress/></div>)
                     :
-                    (reserves.past ? <TableOfReserves rows={rows}/> :
+                    (reserves.past.tableRef === number ? <TableOfReserves rows={rows}/> :
                         <div className={classes.progress}><CircularProgress/></div>)
                 }
             </div>

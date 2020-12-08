@@ -28,7 +28,7 @@ export function* getFutureReserves(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
         const reserves = yield call(ReserveApi.getFutureReserves, action.params);
-        yield put({type: types.GET_FUTURE_RESERVES_SUCCESS, reserves});
+        yield put({type: types.GET_FUTURE_RESERVES_SUCCESS, params: action.params, reserves});
     } catch (e) {
         yield put({type: types.API_CALL_ERROR});
         yield put({type: types.GET_FUTURE_RESERVES_FAILURE, text: e.message});
@@ -39,7 +39,7 @@ export function* getPastReserves(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
         const reserves = yield call(ReserveApi.getPastReserves, action.params);
-        yield put({type: types.GET_PAST_RESERVES_SUCCESS, reserves});
+        yield put({type: types.GET_PAST_RESERVES_SUCCESS, params: action.params, reserves});
     } catch (e) {
         yield put({type: types.API_CALL_ERROR});
         yield put({type: types.GET_PAST_RESERVES_FAILURE, text: e.message});

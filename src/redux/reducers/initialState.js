@@ -10,9 +10,15 @@ const initialState = {
     },
     tables: null,
     reserves: {
-        past: null,
-        future: null,
-        report: null
+        past: {
+            items: [],
+            tableRef: 0
+        },
+        future: {
+            items: [],
+            tableRef: 0
+        },
+        report: []
     },
     apiCallsInProgress: 0
 };
