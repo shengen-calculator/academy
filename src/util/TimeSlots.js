@@ -6,6 +6,6 @@ export const timeSlots = [
     { min: 780, label: '1:00 PM - 2:00 PM'},
     { min: 840, label: '2:00 PM - 3:00 PM'},
     { min: 900, label: '3:00 PM - 4:00 PM'},
-    { min: 840, label: '4:00 PM - 5:00 PM'},
-    { min: 900, label: '5:00 PM - 6:00 PM'}
+    { min: 960, label: '4:00 PM - 5:00 PM'},
+    { min: 1020, label: '5:00 PM - 6:00 PM'}
 ];

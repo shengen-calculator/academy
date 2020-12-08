@@ -23,6 +23,7 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TableOfReserves from "../../component/TableOfReserves";
+import DateFnsAdapter from "@date-io/date-fns";
 
 
 function TablePage(props) {
@@ -34,7 +35,7 @@ function TablePage(props) {
         getPastReservesRequest,
         reserves
     } = props;
-    let {number} = useParams();
+    const {number} = useParams();
     const history = useHistory();
     const [dialog, setDialog] = React.useState({
         isOpen: false,
@@ -49,10 +50,10 @@ function TablePage(props) {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        if(filter.isFuture === "true" && reserves.future.tableRef !== number) {
-            getFutureReservesRequest({uid: auth.userId, tableRef: number});
-        } else if(filter.isFuture === "false" && reserves.past.tableRef !== number) {
-            getPastReservesRequest({uid: auth.userId, tableRef: number});
+        if(filter.isFuture === "true" && reserves.future.tableRef !== Number(number)) {
+            getFutureReservesRequest({uid: auth.userId, tableRef: Number(number)});
+        } else if(filter.isFuture === "false" && reserves.past.tableRef !== Number(number)) {
+            getPastReservesRequest({uid: auth.userId, tableRef: Number(number)});
         }
     }, [
         getFutureReservesRequest,
@@ -63,6 +64,32 @@ function TablePage(props) {
         auth.userId,
         number
     ]);
+
+    const isFutureSlot = (item) => {
+        const dateFns = new DateFnsAdapter();
+        const startDate = dateFns.startOfDay(new Date());
+        if(dateFns.isSameDay(item.date.toDate(), startDate)) {
+            const diff = dateFns.getDiff(new Date(), startDate)/60000;
+            return diff < item.slot;
+        }
+        return true;
+    };
+
+
+    const isPastSlot = (item) => {
+        const dateFns = new DateFnsAdapter();
+        const startDate = dateFns.startOfDay(new Date());
+        if(dateFns.isSameDay(item.date, startDate)) {
+            const diff = dateFns.getDiff(new Date(), startDate)/60000;
+            return diff > item.slot;
+        }
+        return true;
+    };
+
+    const compareItems = (x, y) => {
+
+    };
+
 
     const goBack = () => {
         history.push(`/reservation`);
@@ -97,8 +124,8 @@ function TablePage(props) {
                 date: dialog.date,
                 name: dialog.customerName,
                 phone: dialog.phoneNumber,
-                tableRef: number,
-                slot: dialog.timeSlot
+                tableRef: Number(number),
+                slot: Number(dialog.timeSlot)
             }
         });
         setDialog({
@@ -208,12 +235,18 @@ function TablePage(props) {
             </div>
             <div className={classes.contentWrapper}>
                 {filter.isFuture === "true" ?
-                    (reserves.future.tableRef === number ?
-                        <TableOfReserves rows={reserves.future.items} onEditClick={openReserveDialog}/> :
+                    (reserves.future.tableRef === Number(number) ?
+                        <TableOfReserves
+                            rows={reserves.future.items.filter(x => isFutureSlot(x))}
+                            onEditClick={openReserveDialog}
+                        /> :
                         <div className={classes.progress}><CircularProgress/></div>)
                     :
-                    (reserves.past.tableRef === number ?
-                        <TableOfReserves rows={reserves.past.items} onEditClick={openReserveDialog}/> :
+                    (reserves.past.tableRef === Number(number) ?
+                        <TableOfReserves
+                            rows={reserves.past.items.filter(x => isPastSlot(x))}
+                            onEditClick={openReserveDialog}
+                        /> :
                         <div className={classes.progress}><CircularProgress/></div>)
                 }
             </div>

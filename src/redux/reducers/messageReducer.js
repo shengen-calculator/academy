@@ -123,6 +123,27 @@ export default function messageReducer(state = initialState.message, action) {
                 text: action.text
             };
 
+        case types.GET_FUTURE_RESERVES_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
+        case types.GET_PAST_RESERVES_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
+        case types.GET_RESERVES_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
         default:
             return state;
     }

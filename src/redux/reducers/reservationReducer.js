@@ -4,8 +4,17 @@ import initialState from './initialState';
 export default function reservationReducer(state = initialState.reserves, action) {
     switch (action.type) {
 
-        case types.ADD_RESERVE_REQUEST:
-            return state;
+        case types.ADD_RESERVE_SUCCESS:
+            return {
+                ...state, future: {
+                    ...state.future,
+                    items: [
+                        ...state.future.items, {
+                            ...action.reserve.item, id: action.reserve.id
+                        }
+                    ]
+                }
+            };
 
         case types.GET_PAST_RESERVES_SUCCESS:
             return {

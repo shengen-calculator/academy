@@ -5,7 +5,15 @@ import DateFnsAdapter from "@date-io/date-fns";
 class ReserveApi {
     static addReserve({uid, reserve}) {
         const userRef = firestore.collection(`users/${uid}/reserves`);
-        return userRef.add(reserve);
+        return userRef.add(reserve).then(ref => {
+            const newRef = firestore.doc(`users/${uid}/reserves/${ref.id}`);
+            return newRef.get().then(snap => {
+                return {
+                    item: snap.data(),
+                    id: snap.id
+                }
+            })
+        });
     }
 
     static getReserves({uid, date}) {
