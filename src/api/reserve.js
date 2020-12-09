@@ -28,6 +28,11 @@ class ReserveApi {
         })
     }
 
+    static deleteReserve({uid, reserveId}) {
+        const reserveRef = firestore.doc(`users/${uid}/reserves/${reserveId}`);
+        return reserveRef.delete();
+    }
+
     static getReserves({uid, date}) {
         let result = [];
         const dateFns = new DateFnsAdapter();

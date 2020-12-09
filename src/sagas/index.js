@@ -19,6 +19,7 @@ import {
 import {
     addReserve,
     saveReserve,
+    deleteReserve,
     getReserves,
     getPastReserves,
     getFutureReserves
@@ -39,5 +40,6 @@ function* mySaga() {
     yield takeLatest(types.GET_FUTURE_RESERVES_REQUEST, getFutureReserves);
     yield takeLatest(types.GET_RESERVES_REQUEST, getReserves);
     yield takeLatest(types.UPDATE_RESERVE_REQUEST, saveReserve);
+    yield takeLatest(types.DELETE_RESERVE_REQUEST, deleteReserve);
 }
 export default mySaga;

@@ -15,6 +15,7 @@ import ReserveDialog from "../../component/ReserveDialog";
 import {
     addReserveRequest,
     updateReserveRequest,
+    deleteReserveRequest,
     getFutureReservesRequest,
     getPastReservesRequest
 } from "../../redux/actions/reserveActions";
@@ -32,6 +33,7 @@ function TablePage(props) {
         classes,
         addReserveRequest,
         updateReserveRequest,
+        deleteReserveRequest,
         auth,
         getFutureReservesRequest,
         getPastReservesRequest,
@@ -134,6 +136,25 @@ function TablePage(props) {
         });
     };
 
+    const handleDelete = () => {
+
+        deleteReserveRequest({
+            uid: auth.userId,
+            reserveId: dialog.id
+        });
+
+        setDialog({
+            ...dialog,
+            isOpen: false,
+            id: '',
+            phoneNumber: '',
+            customerName: '',
+            date: new Date(),
+            timeSlot: ''
+        });
+
+    };
+
 
     const isFormValid = () => {
 
@@ -155,10 +176,6 @@ function TablePage(props) {
         setErrors(errors);
         // Form is valid if the errors object still has no properties
         return Object.keys(errors).length === 0;
-    };
-
-    const handleDelete = () => {
-
     };
 
     const openReserveDialog = (e, reserve) => {
@@ -293,6 +310,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
     addReserveRequest,
     updateReserveRequest,
+    deleteReserveRequest,
     getFutureReservesRequest,
     getPastReservesRequest
 };

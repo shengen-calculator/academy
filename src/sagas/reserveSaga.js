@@ -24,6 +24,17 @@ export function* saveReserve(action) {
     }
 }
 
+export function* deleteReserve(action) {
+    try {
+        yield put({type: types.BEGIN_API_CALL});
+        yield call(ReserveApi.deleteReserve, action.params);
+        yield put({type: types.DELETE_RESERVE_SUCCESS, params: action.params});
+    } catch (e) {
+        yield put({type: types.API_CALL_ERROR});
+        yield put({type: types.DELETE_RESERVE_FAILURE, text: e.message});
+    }
+}
+
 export function* getReserves(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
