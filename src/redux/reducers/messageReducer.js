@@ -53,6 +53,13 @@ export default function messageReducer(state = initialState.message, action) {
                 type: 'success',
             };
 
+        case types.UPDATE_RESERVE_SUCCESS:
+            return {
+                ...state,
+                text: `Information about your reservation successfully updated`,
+                type: 'success',
+            };
+
         case types.LOG_OUT_SUCCESS:
             return {
                 ...state,
@@ -138,6 +145,13 @@ export default function messageReducer(state = initialState.message, action) {
             };
 
         case types.GET_RESERVES_FAILURE:
+            return {
+                ...state,
+                type: 'error',
+                text: action.text
+            };
+
+        case types.UPDATE_RESERVE_FAILURE:
             return {
                 ...state,
                 type: 'error',

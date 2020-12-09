@@ -16,6 +16,19 @@ export default function reservationReducer(state = initialState.reserves, action
                 }
             };
 
+        case types.UPDATE_RESERVE_SUCCESS:
+            return {
+                ...state, future: {
+                    ...state.future,
+                    items: [
+                        ...state.future.items.filter(x => x.id !== action.reserve.id), {
+                            ...action.reserve.item, id: action.reserve.id
+                        }
+                    ]
+                }
+            };
+
+
         case types.GET_PAST_RESERVES_SUCCESS:
             return {
                 ...state, past: {

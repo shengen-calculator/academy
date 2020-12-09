@@ -16,6 +16,18 @@ class ReserveApi {
         });
     }
 
+    static saveReserve({uid, reserve, reserveId}) {
+        const reserveRef = firestore.doc(`users/${uid}/reserves/${reserveId}`);
+        return reserveRef.set(reserve, { merge: true }).then(() => {
+            return reserveRef.get().then(snap => {
+               return {
+                   item: snap.data(),
+                   id: snap.id
+               }
+            });
+        })
+    }
+
     static getReserves({uid, date}) {
         let result = [];
         const dateFns = new DateFnsAdapter();

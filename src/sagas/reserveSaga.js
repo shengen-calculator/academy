@@ -13,6 +13,17 @@ export function* addReserve(action) {
     }
 }
 
+export function* saveReserve(action) {
+    try {
+        yield put({type: types.BEGIN_API_CALL});
+        const reserve = yield call(ReserveApi.saveReserve, action.params);
+        yield put({type: types.UPDATE_RESERVE_SUCCESS, reserve});
+    } catch (e) {
+        yield put({type: types.API_CALL_ERROR});
+        yield put({type: types.UPDATE_RESERVE_FAILURE, text: e.message});
+    }
+}
+
 export function* getReserves(action) {
     try {
         yield put({type: types.BEGIN_API_CALL});
