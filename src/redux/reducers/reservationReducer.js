@@ -28,6 +28,15 @@ export default function reservationReducer(state = initialState.reserves, action
                 }
             };
 
+        case types.DELETE_RESERVE_SUCCESS:
+            return {
+                ...state, future: {
+                    ...state.future,
+                    items: [
+                        ...state.future.items.filter(x => x.id !== action.params.reserveId)
+                    ]
+                }
+            };
 
         case types.GET_PAST_RESERVES_SUCCESS:
             return {
