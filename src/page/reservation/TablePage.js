@@ -276,7 +276,7 @@ function TablePage(props) {
                 handleDelete={handleDelete}
                 handleChange={handleChange}
                 reserveDateHandleChange={reserveDateHandleChange}
-                getPossibleSlots={() => getPossibleSlots(reserves.future, dialog.date, dialog.id ? dialog.timeSlot : null)}
+                getPossibleSlots={() => getPossibleSlots(reserves.future, dialog.date, dialog.id ? dialog : null)}
                 handleClose={handleClose}/>
         </Paper>
     );

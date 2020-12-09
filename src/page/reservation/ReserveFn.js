@@ -35,7 +35,7 @@ export const compareItems = (x, y) => {
     return dateFns.getDiff(xDate,yDate) > 0 ? 1 : -1;
 };
 
-export const getPossibleSlots = (futureReserves, date, currentSlot) => {
+export const getPossibleSlots = (futureReserves, date, current) => {
     const dateFns = new DateFnsAdapter();
     let extraSlot;
     let slots = Object.keys(timeSlots).map(x => {
@@ -45,8 +45,12 @@ export const getPossibleSlots = (futureReserves, date, currentSlot) => {
         }
     });
 
-    if(currentSlot) {
-        extraSlot = slots.find(x => x.min === currentSlot);
+    if(current) {
+        const original = futureReserves.items.find(x => x.id === current.id);
+        if(dateFns.isSameDay(original.date.toDate(), date)) {
+            extraSlot = slots.find(x => x.min === current.timeSlot);
+        }
+
     }
 
     if(dateFns.isSameDay(date, new Date())) {
