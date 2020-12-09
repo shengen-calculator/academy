@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import ReserveDialog from "../../component/ReserveDialog";
 import {
     addReserveRequest,
+    updateReserveRequest,
     getFutureReservesRequest,
     getPastReservesRequest
 } from "../../redux/actions/reserveActions";
@@ -30,6 +31,7 @@ function TablePage(props) {
     const {
         classes,
         addReserveRequest,
+        updateReserveRequest,
         auth,
         getFutureReservesRequest,
         getPastReservesRequest,
@@ -39,6 +41,7 @@ function TablePage(props) {
     const history = useHistory();
     const [dialog, setDialog] = React.useState({
         isOpen: false,
+        id: '',
         phoneNumber: '',
         customerName: '',
         date: new Date(),
@@ -92,19 +95,38 @@ function TablePage(props) {
     const handleSave = (e) => {
         e.preventDefault();
         if (!isFormValid()) return;
-        addReserveRequest({
-            uid: auth.userId,
-            reserve: {
-                date: dialog.date,
-                name: dialog.customerName,
-                phone: dialog.phoneNumber,
-                tableRef: Number(number),
-                slot: Number(dialog.timeSlot)
-            }
-        });
+
+        if(dialog.id) {
+            // update existing reserve
+            updateReserveRequest({
+                uid: auth.userId,
+                reserveId: dialog.id,
+                reserve: {
+                    date: dialog.date,
+                    name: dialog.customerName,
+                    phone: dialog.phoneNumber,
+                    tableRef: Number(number),
+                    slot: Number(dialog.timeSlot)
+                }
+            });
+        } else {
+            // create new one
+            addReserveRequest({
+                uid: auth.userId,
+                reserve: {
+                    date: dialog.date,
+                    name: dialog.customerName,
+                    phone: dialog.phoneNumber,
+                    tableRef: Number(number),
+                    slot: Number(dialog.timeSlot)
+                }
+            });
+        }
+
         setDialog({
             ...dialog,
             isOpen: false,
+            id: '',
             phoneNumber: '',
             customerName: '',
             date: new Date(),
@@ -139,16 +161,31 @@ function TablePage(props) {
 
     };
 
-    const openReserveDialog = () => {
+    const openReserveDialog = (e, reserve) => {
         setErrors({});
-        setDialog({...dialog, isOpen: true});
 
+        if (reserve) {
+            setDialog({
+                ...dialog,
+                id: reserve.id,
+                phoneNumber: reserve.phone,
+                customerName: reserve.name,
+                date: reserve.date.toDate(),
+                timeSlot: reserve.slot,
+                isOpen: true
+            });
+
+
+        } else {
+            setDialog({...dialog, isOpen: true});
+        }
     };
 
     const handleClose = () => {
         setDialog({
             ...dialog,
             isOpen: false,
+            id: '',
             phoneNumber: '',
             customerName: '',
             date: new Date(),
@@ -227,6 +264,7 @@ function TablePage(props) {
                 }
             </div>
             <ReserveDialog
+                id={dialog.id}
                 isOpen={dialog.isOpen}
                 refNumber={number}
                 date={dialog.date}
@@ -238,7 +276,7 @@ function TablePage(props) {
                 handleDelete={handleDelete}
                 handleChange={handleChange}
                 reserveDateHandleChange={reserveDateHandleChange}
-                getPossibleSlots={() => getPossibleSlots(reserves.future, dialog.date)}
+                getPossibleSlots={() => getPossibleSlots(reserves.future, dialog.date, dialog.id ? dialog.timeSlot : null)}
                 handleClose={handleClose}/>
         </Paper>
     );
@@ -254,6 +292,7 @@ function mapStateToProps(state) {
 // noinspection JSUnusedGlobalSymbols
 const mapDispatchToProps = {
     addReserveRequest,
+    updateReserveRequest,
     getFutureReservesRequest,
     getPastReservesRequest
 };

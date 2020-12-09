@@ -30,7 +30,6 @@ function ReserveDialog({
                            handleClose,
                            handleDelete,
                            getPossibleSlots,
-
                            id,
                            ...props
                        }) {

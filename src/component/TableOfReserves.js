@@ -29,7 +29,7 @@ function TableOfReserves(props) {
                         <TableCell align="right">Time&nbsp;slot</TableCell>
                         <TableCell align="right">Customer&nbsp;name</TableCell>
                         <TableCell align="right">Customer&nbsp;phone</TableCell>
-                        {isEditable && <TableCell align="right"></TableCell>}
+                        {isEditable && <TableCell align="right"/>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -47,7 +47,7 @@ function TableOfReserves(props) {
                                 <Button
                                     color="primary"
                                     className={classes.button}
-                                    onClick={onEditClick}>
+                                    onClick={(e) => onEditClick(e, row)}>
                                     Edit
                                 </Button>
                             </TableCell>}
