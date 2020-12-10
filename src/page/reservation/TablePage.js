@@ -261,7 +261,7 @@ function TablePage(props) {
                     </Select>
                 </FormControl>
             </div>
-            <div className={classes.contentWrapper}>
+            <div className={classes.tableWrapper}>
                 {filter.isFuture === "true" ?
                     (reserves.future.tableRef === Number(number) ?
                         <TableOfReserves

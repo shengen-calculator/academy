@@ -56,7 +56,7 @@ function ReportPage(props) {
                                         return unique.includes(item.tableRef) ? unique : [...unique, item.tableRef]
                                     }, []).sort((x, y) => x - y).map((tableRef) =>
                                         <div key={tableRef}>
-                                            <Typography className={classes.label}>Table #{tableRef}</Typography>
+                                            <Typography variant="h5" className={classes.label}>Table #{tableRef}</Typography>
                                             <TableOfReserves
                                                 rows={reserves.report.filter(x => x.tableRef === tableRef)}
                                                 isEditable={false}

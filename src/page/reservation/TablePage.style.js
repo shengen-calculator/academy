@@ -22,6 +22,9 @@ const styles = (theme) => ({
         justifyContent: 'space-between',
         display: 'flex'
     },
+    tableWrapper: {
+        margin: '20px 16px',
+    },
     filterWrapper: {
         margin: '30px 16px',
         justifyContent: 'flex-end',
