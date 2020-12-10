@@ -20,6 +20,10 @@ const styles = (theme) => ({
     button: {
         borderColor: lightColor,
     },
+    line: {
+        color: theme.palette.primary.main,
+        height: '4px'
+    }
 });
 
 export default styles;

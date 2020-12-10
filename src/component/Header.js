@@ -11,9 +11,10 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from "./Header.style";
 import {connect} from "react-redux";
 import {logoutRequest} from "../redux/actions/authenticationActions";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 function Header(props) {
-    const { classes, onDrawerToggle, text, auth, logoutRequest } = props;
+    const { classes, onDrawerToggle, text, auth, logoutRequest, calls } = props;
     return (
         <React.Fragment>
             <AppBar color="primary" position="sticky" elevation={0}>
@@ -66,6 +67,7 @@ function Header(props) {
                         </Grid>
                     </Grid>
                 </Toolbar>
+                {calls > 0 ? <LinearProgress color="secondary" /> : <div className={classes.line}/>}
             </AppBar>
         </React.Fragment>
     );
@@ -74,7 +76,8 @@ function Header(props) {
 
 function mapStateToProps(state) {
     return {
-        auth: state.authentication
+        auth: state.authentication,
+        calls: state.apiCallsInProgress
     }
 }
 
