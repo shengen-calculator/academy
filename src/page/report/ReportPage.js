@@ -10,6 +10,7 @@ import {DatePicker} from "@material-ui/pickers";
 import TableOfReserves from "../../component/TableOfReserves";
 import {getReservesRequest} from "../../redux/actions/reserveActions";
 import {connect} from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 function ReportPage(props) {
@@ -45,12 +46,19 @@ function ReportPage(props) {
                     onChange={reserveDateHandleChange}
                 />
             </div>
-            <div className={classes.tableWrapper}>
-                <TableOfReserves
-                    rows={reserves.report}
-                    isEditable={false}
-                />
-            </div>
+            {
+                reserves.report != null ?
+                    (
+                        reserves.report.length > 0 ? <div className={classes.tableWrapper}>
+                                <TableOfReserves
+                                    rows={reserves.report}
+                                    isEditable={false}
+                                />
+                            </div> :
+                            <Typography className={classes.label}>No records found</Typography>
+                    ) :
+                    <div className={classes.progress}><CircularProgress/></div>
+            }
         </Paper>
     );
 }

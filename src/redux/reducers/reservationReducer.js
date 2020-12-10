@@ -54,6 +54,11 @@ export default function reservationReducer(state = initialState.reserves, action
                 }
             };
 
+        case types.GET_RESERVES_REQUEST:
+            return {
+                ...state, report: null
+            };
+
         case types.GET_RESERVES_SUCCESS:
             return {
                 ...state, report: action.reserves

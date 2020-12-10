@@ -8,6 +8,18 @@ const styles = (theme) => ({
     block: {
         display: 'block',
     },
+    label: {
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '40px'
+    },
+    progress: {
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: '40px'
+    },
     pickerWrapper: {
         margin: '40px 16px',
         justifyContent: 'flex-end',
