@@ -45,7 +45,7 @@ function ReserveDialog({
                     </DialogContentText>
                     <div className={classes.datetime}>
                         <DatePicker
-                            label="Basic example"
+                            label="Reservation date"
                             name="date"
                             minDate={new Date()}
                             value={date}

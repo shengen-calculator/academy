@@ -5,20 +5,17 @@ const styles = (theme) => ({
         margin: 'auto',
         overflow: 'hidden',
     },
-    searchBar: {
-        borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
-    },
-    searchInput: {
-        fontSize: theme.typography.fontSize,
-    },
     block: {
         display: 'block',
     },
-    addUser: {
-        marginRight: theme.spacing(1),
-    },
-    contentWrapper: {
+    pickerWrapper: {
         margin: '40px 16px',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        display:'flex',
+    },
+    tableWrapper: {
+        margin: '40px 16px'
     },
 });
 export default styles;
