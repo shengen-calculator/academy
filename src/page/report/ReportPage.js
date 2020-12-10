@@ -49,11 +49,21 @@ function ReportPage(props) {
             {
                 reserves.report != null ?
                     (
-                        reserves.report.length > 0 ? <div className={classes.tableWrapper}>
-                                <TableOfReserves
-                                    rows={reserves.report}
-                                    isEditable={false}
-                                />
+                        reserves.report.length > 0 ?
+                            <div className={classes.tableWrapper}>
+                                {
+                                    reserves.report.reduce((unique, item) => {
+                                        return unique.includes(item.tableRef) ? unique : [...unique, item.tableRef]
+                                    }, []).sort((x, y) => x - y).map((tableRef) =>
+                                        <div key={tableRef}>
+                                            <Typography className={classes.label}>Table #{tableRef}</Typography>
+                                            <TableOfReserves
+                                                rows={reserves.report.filter(x => x.tableRef === tableRef)}
+                                                isEditable={false}
+                                            />
+                                        </div>
+                                    )
+                                }
                             </div> :
                             <Typography className={classes.label}>No records found</Typography>
                     ) :
