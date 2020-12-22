@@ -27,6 +27,7 @@ const categories = [
     },
     {
         id: 'Manager',
+        onlyAuth: true,
         children: [
             { id: 'Editor', icon: <SettingsIcon />, path: '/editor' },
             { id: 'Reservation', icon: <TimerIcon />, path: '/reservation' },
@@ -44,8 +45,10 @@ function Navigator(props) {
                 {auth.restaurant && <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
                     {auth.restaurant}
                 </ListItem>}
-                {categories.map(({ id, children }) => (
-                    <React.Fragment key={id}>
+                {categories.map(({ id, children, onlyAuth }) => {
+                    const isItemShown = (onlyAuth && auth.name) || !onlyAuth;
+
+                    return (isItemShown && <React.Fragment key={id}>
                         <ListItem className={classes.categoryHeader}>
                             <ListItemText
                                 classes={{
@@ -55,14 +58,14 @@ function Navigator(props) {
                                 {id}
                             </ListItemText>
                         </ListItem>
-                        {children.map(({ id: childId, icon, path, isAuth}) => (
+                        {children.map(({id: childId, icon, path, isAuth}) => (
                             <React.Fragment key={childId}>
-                                {((auth.name && !isAuth)||(!auth.name))&& <ListItem
+                                {((auth.name && !isAuth) || (!auth.name)) && <ListItem
                                     component={NavLink} to={path}
                                     className={clsx(classes.item)}
                                     activeClassName={classes.itemActiveItem}
                                     isActive={(match, location) => {
-                                        if(location.pathname === '/' && path === "/about") {
+                                        if (location.pathname === '/' && path === "/about") {
                                             return true;
                                         }
                                         return match;
@@ -81,9 +84,9 @@ function Navigator(props) {
                             </React.Fragment>
                         ))}
 
-                        <Divider className={classes.divider} />
-                    </React.Fragment>
-                ))}
+                        <Divider className={classes.divider}/>
+                    </React.Fragment>)
+                })}
             </List>
         </Drawer>
     );
