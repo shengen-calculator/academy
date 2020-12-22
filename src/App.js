@@ -120,7 +120,7 @@ function Paperbase(props) {
                                         <RegistrationPage/>
                                     </main>
                                 </Route>
-                                <Route exact path="/name" auth={auth}>
+                                <Route exact path="/name">
                                     <Header text="Restaurant name" onDrawerToggle={handleDrawerToggle}/>
                                     <main className={classes.main}>
                                         <RestaurantNamePage/>
